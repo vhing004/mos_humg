@@ -194,7 +194,7 @@ export const Layout: React.FC = () => {
           collapsed ? 'md:pl-20' : 'md:pl-64'
         }`}
       >
-        <main className="p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 max-w-7xl mx-auto w-full">
+        <main className="p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 max-w-screen-2xl mx-auto w-full">
           <Outlet />
         </main>
       </div>
