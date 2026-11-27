@@ -75,11 +75,24 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
   const [cursorPos, setCursorPos] = useState<number>(0);
   const [checkResults, setCheckResults] = useState<Record<string, boolean> | null>(null);
   const [showHint, setShowHint] = useState(false);
-  const [showTheory, setShowTheory] = useState(true);
+  const [showTheory, setShowTheory] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : true
+  );
   // Trạng thái thu gọn danh sách bài Lab và cột ảnh đề bên trái
-  const [showLabList, setShowLabList] = useState(true);
+  const [showLabList, setShowLabList] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : true
+  );
   const [showDePane, setShowDePane] = useState(true);
   const [deZoom, setDeZoom] = useState(1);
+  // Chế độ xem trên điện thoại (< lg): chia đôi trên/dưới, chỉ đề, hoặc chỉ sheet
+  const [mobileView, setMobileView] = useState<'split' | 'image' | 'sheet'>('split');
+  // Hỗ trợ chạm 2 ô trên điện thoại để chọn vùng (A1:B5)
+  const [touchRangeStart, setTouchRangeStart] = useState<{
+    row: number;
+    col: number;
+    insertAt: number;
+    lastLen: number;
+  } | null>(null);
 
   // Trạng thái kéo chọn vùng tham chiếu
   const [dragSelect, setDragSelect] = useState<{
@@ -226,6 +239,10 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     setCheckResults(null);
     setShowHint(false);
     setDeZoom(1);
+    setTouchRangeStart(null);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setShowLabList(false);
+    }
   };
 
   const handleCellChange = (ref: string, value: string, nextCursor?: number) => {
@@ -240,6 +257,21 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
       setCursorPos(nextCursor);
     }
     setCheckResults(null);
+  };
+
+  // Chèn nhanh ký tự công thức (rất hữu ích trên bàn phím điện thoại)
+  const handleInsertToken = (token: string) => {
+    if (!activeTarget) return;
+    const pos = formulaInputRef.current?.selectionStart ?? cursorPos;
+    const nextFormula = activeFormula.slice(0, pos) + token + activeFormula.slice(pos);
+    const nextPos = pos + token.length;
+    handleCellChange(activeTarget.ref, nextFormula, nextPos);
+    window.setTimeout(() => {
+      if (formulaInputRef.current) {
+        formulaInputRef.current.focus();
+        formulaInputRef.current.setSelectionRange(nextPos, nextPos);
+      }
+    }, 0);
   };
 
   const handleF4Lock = () => {
@@ -305,6 +337,41 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     // Kiểm tra xem đang ở chế độ "chỉ chọn ô/vùng cho công thức" hay không
     const curPos = formulaInputRef.current?.selectionStart ?? cursorPos;
     const target = targetByCoord.get(`${rIdx}:${cIdx}`);
+
+    // Chế độ chạm 2 ô liên tiếp trên điện thoại để chọn vùng (A1:B5)
+    if (touchRangeStart && activeTarget && !(target && target.ref === activeTarget.ref)) {
+      e.preventDefault();
+      if (touchRangeStart.row === -1) {
+        const refStr = formatRangeRef(rIdx, cIdx, rIdx, cIdx);
+        const nextFormula =
+          activeFormula.slice(0, curPos) + refStr + activeFormula.slice(curPos);
+        handleCellChange(activeTarget.ref, nextFormula, curPos + refStr.length);
+        setTouchRangeStart({
+          row: rIdx,
+          col: cIdx,
+          insertAt: curPos,
+          lastLen: refStr.length,
+        });
+      } else {
+        const rangeStr = formatRangeRef(
+          touchRangeStart.row,
+          touchRangeStart.col,
+          rIdx,
+          cIdx
+        );
+        const nextFormula =
+          activeFormula.slice(0, touchRangeStart.insertAt) +
+          rangeStr +
+          activeFormula.slice(touchRangeStart.insertAt + touchRangeStart.lastLen);
+        handleCellChange(
+          activeTarget.ref,
+          nextFormula,
+          touchRangeStart.insertAt + rangeStr.length
+        );
+        setTouchRangeStart(null);
+      }
+      return;
+    }
 
     if (
       activeTarget &&
@@ -520,10 +587,40 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
 
       {/* Khu vực làm bài: Ảnh đề bên trái + Sheet thực hành bên phải */}
       <div className="flex-1 min-w-0 w-full flex flex-col lg:flex-row gap-4 items-start">
+        {/* Thanh chuyển chế độ xem trên điện thoại (< lg) */}
+        {lab.imageUrl && (
+          <div className="lg:hidden w-full flex gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-xs sticky top-14 z-20">
+            {(
+              [
+                { id: 'split', label: 'Đề + Sheet' },
+                { id: 'image', label: 'Chỉ Đề bài' },
+                { id: 'sheet', label: 'Chỉ Bảng tính' },
+              ] as const
+            ).map((mode) => (
+              <button
+                key={mode.id}
+                type="button"
+                onClick={() => setMobileView(mode.id)}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                  mobileView === mode.id
+                    ? 'bg-indigo-600 text-white'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {mode.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Cột 2: Ảnh đề bài (bên trái sheet thực hành) */}
         {lab.imageUrl &&
           (showDePane ? (
-            <div className="w-full lg:w-[44%] xl:w-[46%] shrink-0 bg-white rounded-2xl border border-slate-200 p-3 space-y-2.5 lg:sticky lg:top-4">
+            <div
+              className={`w-full lg:w-[44%] xl:w-[46%] shrink-0 bg-white rounded-2xl border border-slate-200 p-3 space-y-2.5 lg:sticky lg:top-4 ${
+                mobileView === 'sheet' ? 'hidden lg:block' : ''
+              }`}
+            >
               <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                   Đề bài mẫu
@@ -556,7 +653,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                   <button
                     type="button"
                     onClick={() => setShowDePane(false)}
-                    className="p-1.5 ml-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                    className="hidden lg:inline-flex p-1.5 ml-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
                     title="Thu gọn đề bài"
                   >
                     <ChevronLeft className="w-3.5 h-3.5" />
@@ -564,7 +661,13 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 </div>
               </div>
 
-              <div className="max-h-[75vh] overflow-auto bg-slate-50 rounded-xl p-2 border border-slate-100">
+              <div
+                className={`overflow-auto bg-slate-50 rounded-xl p-2 border border-slate-100 ${
+                  mobileView === 'split'
+                    ? 'max-h-[34vh] lg:max-h-[75vh]'
+                    : 'max-h-[72vh] lg:max-h-[75vh]'
+                }`}
+              >
                 <img
                   src={lab.imageUrl}
                   alt={lab.title}
@@ -574,7 +677,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
               </div>
             </div>
           ) : (
-            <div className="w-full lg:w-11 shrink-0 bg-white rounded-2xl border border-slate-200 p-2 flex lg:flex-col items-center justify-between gap-2">
+            <div className="hidden lg:flex w-11 shrink-0 bg-white rounded-2xl border border-slate-200 p-2 flex-col items-center justify-between gap-2">
               <button
                 type="button"
                 onClick={() => setShowDePane(true)}
@@ -582,13 +685,16 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 title="Mở đề bài mẫu"
               >
                 <ChevronRight className="w-4 h-4" />
-                <span className="text-xs font-semibold lg:hidden">Mở đề bài mẫu</span>
               </button>
             </div>
           ))}
 
         {/* Cột 3: Bảng tính tương tác HyperFormula */}
-        <div className="flex-1 min-w-0 w-full space-y-4">
+        <div
+          className={`flex-1 min-w-0 w-full space-y-4 ${
+            lab.imageUrl && mobileView === 'image' ? 'hidden lg:block' : ''
+          }`}
+        >
           <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
               <div>
@@ -713,6 +819,46 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
               </button>
             </div>
 
+            {/* Thanh chèn ký tự nhanh & chọn vùng chạm 2 ô cho điện thoại */}
+            {activeTarget && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                {['=', '(', ')', ',', ':', '"', '$'].map((tok) => (
+                  <button
+                    key={tok}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleInsertToken(tok);
+                    }}
+                    className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 text-xs font-mono font-bold min-w-[32px]"
+                  >
+                    {tok}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  disabled={!activeFormula.startsWith('=')}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    setTouchRangeStart((prev) =>
+                      prev ? null : { row: -1, col: -1, insertAt: 0, lastLen: 0 }
+                    );
+                  }}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-colors disabled:opacity-40 ${
+                    touchRangeStart
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'
+                  }`}
+                >
+                  {touchRangeStart
+                    ? touchRangeStart.row === -1
+                      ? 'Chạm ô đầu...'
+                      : 'Chạm ô cuối...'
+                    : 'Chạm 2 ô chọn vùng'}
+                </button>
+              </div>
+            )}
+
             {/* Dropdown gợi ý tên hàm */}
             {matchingFunctions.length > 0 && (
               <div className="bg-white border border-slate-200 rounded-xl shadow-md p-1.5 flex flex-wrap gap-1.5">
@@ -773,7 +919,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                   {lab.colHeaders.map((col) => (
                     <th
                       key={col}
-                      className="px-2.5 py-1.5 border-b border-r border-slate-200 text-center font-semibold min-w-[92px]"
+                      className="px-2 sm:px-2.5 py-1.5 border-b border-r border-slate-200 text-center font-semibold min-w-[72px] sm:min-w-[92px]"
                     >
                       {col}
                     </th>

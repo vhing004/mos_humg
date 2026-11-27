@@ -15,6 +15,7 @@ export const LabViewer: React.FC<LabViewerProps> = ({
 }) => {
   const [selectedLabId, setSelectedLabId] = useState<string>(labs[0]?.id ?? '');
   const [zoom, setZoom] = useState(1);
+  const [mobileTab, setMobileTab] = useState<'image' | 'tasks'>('image');
 
   const currentLab = labs.find((l) => l.id === selectedLabId) ?? labs[0];
 
@@ -57,9 +58,39 @@ export const LabViewer: React.FC<LabViewerProps> = ({
         </div>
       )}
 
+      {/* Chuyển nhanh Đề bài / Checklist trên điện thoại */}
+      <div className="lg:hidden flex gap-1 bg-white p-1 rounded-xl border border-slate-200 sticky top-14 z-20">
+        <button
+          type="button"
+          onClick={() => setMobileTab('image')}
+          className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-colors ${
+            mobileTab === 'image'
+              ? 'bg-indigo-600 text-white'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          Đề bài mẫu ({currentLab.images.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('tasks')}
+          className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-colors ${
+            mobileTab === 'tasks'
+              ? 'bg-indigo-600 text-white'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          Checklist ({doneCount}/{currentLab.tasks.length})
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Ảnh đề bài có phóng to/thu nhỏ */}
-        <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-4 space-y-3">
+        <div
+          className={`lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-4 space-y-3 ${
+            mobileTab !== 'image' ? 'hidden lg:block' : ''
+          }`}
+        >
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Đề bài mẫu ({currentLab.images.length} trang)
@@ -107,7 +138,11 @@ export const LabViewer: React.FC<LabViewerProps> = ({
         </div>
 
         {/* Checklist các bước thực hành */}
-        <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 space-y-4 h-fit">
+        <div
+          className={`lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 space-y-4 h-fit ${
+            mobileTab !== 'tasks' ? 'hidden lg:block' : ''
+          }`}
+        >
           <div>
             <h3 className="font-bold text-slate-900 text-base">{currentLab.title}</h3>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">

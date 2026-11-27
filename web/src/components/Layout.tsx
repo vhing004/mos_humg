@@ -194,10 +194,43 @@ export const Layout: React.FC = () => {
           collapsed ? 'md:pl-20' : 'md:pl-64'
         }`}
       >
-        <main className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+        <main className="p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 max-w-7xl mx-auto w-full">
           <Outlet />
         </main>
       </div>
+
+      {/* Bottom Navigation Bar cho điện thoại */}
+      <nav
+        aria-label="Điều hướng nhanh"
+        className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-slate-200 dark:border-slate-800 px-1 py-1.5 flex items-center justify-around"
+      >
+        {[
+          { to: '/', label: 'Tổng quan', icon: GraduationCap, exact: true },
+          { to: '/word', label: 'Word', icon: FileText },
+          { to: '/excel', label: 'Excel', icon: FileSpreadsheet },
+          { to: '/ppt', label: 'PPT', icon: Presentation },
+          { to: '/mock-exam', label: 'Thi thử', icon: CheckSquare },
+        ].map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.exact}
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center gap-0.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-colors min-w-[56px] ${
+                  isActive
+                    ? 'text-indigo-600 bg-indigo-50/80'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`
+              }
+            >
+              <Icon className="w-4 h-4 shrink-0" />
+              <span>{item.label}</span>
+            </NavLink>
+          );
+        })}
+      </nav>
     </div>
   );
 };

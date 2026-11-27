@@ -423,6 +423,27 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
           Nộp bài & Xem điểm
         </button>
       </div>
+
+      {/* Thanh điều hướng nhanh dính dưới đáy cho điện thoại */}
+      <div className="lg:hidden sticky bottom-16 z-20 bg-white/95 backdrop-blur border border-slate-200 rounded-2xl p-2 shadow-md flex items-center justify-between gap-2">
+        <button
+          disabled={currentIdx === 0}
+          onClick={() => setCurrentIdx((i) => Math.max(0, i - 1))}
+          className="px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold disabled:opacity-40 bg-white"
+        >
+          ← Trước
+        </button>
+        <span className="text-xs font-bold text-slate-700">
+          {currentIdx + 1}/{questions.length} • {formatSeconds(secondsLeft)}
+        </span>
+        <button
+          disabled={currentIdx >= questions.length - 1}
+          onClick={() => setCurrentIdx((i) => Math.min(questions.length - 1, i + 1))}
+          className="px-3 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold disabled:opacity-40"
+        >
+          Tiếp →
+        </button>
+      </div>
     </div>
   );
 };
