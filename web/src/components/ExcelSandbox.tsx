@@ -1,16 +1,19 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HyperFormula } from 'hyperformula';
 import {
   BookOpen,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   HelpCircle,
-  Image as ImageIcon,
   Lock,
   MousePointerClick,
   Play,
   RotateCcw,
   Sparkles,
   XCircle,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react';
 import interactiveLabsRaw from '../data/excel_interactive_labs.json';
 import { ExcelInteractiveLab, LearningProgress } from '../types';
@@ -72,9 +75,11 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
   const [checkResults, setCheckResults] = useState<Record<string, boolean> | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [showTheory, setShowTheory] = useState(true);
-  const [showImage, setShowImage] = useState(false);
+  // Tráº¡ng thÃ¡i cá»™t Ä‘á» bÃ i (trÃ¡i): hiá»‡n/áº©n & zoom
+  const [showDePane, setShowDePane] = useState(true);
+  const [deZoom, setDeZoom] = useState(1);
 
-  // Trạng thái kéo chọn vùng tham chiếu
+  // Tráº¡ng thÃ¡i kÃ©o chá»n vÃ¹ng tham chiáº¿u
   const [dragSelect, setDragSelect] = useState<{
     startRow: number;
     startCol: number;
@@ -84,7 +89,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     lastInsertedLen: number;
   } | null>(null);
 
-  // Trạng thái kéo Fill Handle sao chép công thức
+  // Tráº¡ng thÃ¡i kÃ©o Fill Handle sao chÃ©p cÃ´ng thá»©c
   const [fillDrag, setFillDrag] = useState<{
     sourceRow: number;
     sourceCol: number;
@@ -122,13 +127,13 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
   const activeTarget = targetByRef.get(activeRef);
   const activeFormula = activeTarget ? currentInputs[activeTarget.ref] ?? '' : '';
 
-  // Highlight các ô/vùng đang được tham chiếu trong công thức hiện tại
+  // Highlight cÃ¡c Ã´/vÃ¹ng Ä‘ang Ä‘Æ°á»£c tham chiáº¿u trong cÃ´ng thá»©c hiá»‡n táº¡i
   const highlightedRanges = useMemo(
     () => parseFormulaReferences(activeFormula),
     [activeFormula]
   );
 
-  // Gợi ý hàm & thanh tham số
+  // Gá»£i Ã½ hÃ m & thanh tham sá»‘
   const autocompleteCtx = useMemo(
     () => getFormulaAutocompleteContext(activeFormula, cursorPos),
     [activeFormula, cursorPos]
@@ -140,7 +145,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     return EXCEL_FUNCTIONS_DOCS.filter((f) => f.name.startsWith(p)).slice(0, 6);
   }, [autocompleteCtx.typingFuncPrefix]);
 
-  // Tính toán toàn bộ bảng tính bằng HyperFormula
+  // TÃ­nh toÃ¡n toÃ n bá»™ báº£ng tÃ­nh báº±ng HyperFormula
   const computedGrid = useMemo(() => {
     const matrix = lab.rows.map((row, rIdx) =>
       row.map((cell, cIdx) => {
@@ -164,7 +169,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     return out;
   }, [lab, currentInputs, targetByCoord]);
 
-  // Kết thúc kéo chuột toàn cục
+  // Káº¿t thÃºc kÃ©o chuá»™t toÃ n cá»¥c
   useEffect(() => {
     const handleWindowMouseUp = () => {
       if (dragSelect) {
@@ -218,7 +223,8 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     setCursorPos(0);
     setCheckResults(null);
     setShowHint(false);
-    setShowImage(false);
+    // Reset zoom Ä‘á» khi Ä‘á»•i bÃ i
+    setDeZoom(1);
   };
 
   const handleCellChange = (ref: string, value: string, nextCursor?: number) => {
@@ -282,7 +288,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     }
     if (e.key === 'Enter') {
       e.preventDefault();
-      // Nhảy xuống ô mục tiêu kế tiếp trong cùng cột nếu có
+      // Nháº£y xuá»‘ng Ã´ má»¥c tiÃªu káº¿ tiáº¿p trong cÃ¹ng cá»™t náº¿u cÃ³
       if (activeTarget) {
         const nextBelow = targetByCoord.get(`${activeTarget.row + 1}:${activeTarget.col}`);
         if (nextBelow) {
@@ -295,7 +301,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
   };
 
   const handleCellMouseDown = (rIdx: number, cIdx: number, e: React.MouseEvent) => {
-    // Kiểm tra xem đang ở chế độ "chỉ chọn ô/vùng cho công thức" hay không
+    // Kiá»ƒm tra xem Ä‘ang á»Ÿ cháº¿ Ä‘á»™ "chá»‰ chá»n Ã´/vÃ¹ng cho cÃ´ng thá»©c" hay khÃ´ng
     const curPos = formulaInputRef.current?.selectionStart ?? cursorPos;
     const target = targetByCoord.get(`${rIdx}:${cIdx}`);
 
@@ -305,7 +311,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
       canInsertReferenceAtCursor(activeFormula, curPos) &&
       !(target && target.ref === activeTarget.ref)
     ) {
-      e.preventDefault(); // Giữ focus cho thao tác chọn vùng
+      e.preventDefault(); // Giá»¯ focus cho thao tÃ¡c chá»n vÃ¹ng
       const refStr = formatRangeRef(rIdx, cIdx, rIdx, cIdx);
       const nextFormula =
         activeFormula.slice(0, curPos) + refStr + activeFormula.slice(curPos);
@@ -321,7 +327,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
       return;
     }
 
-    // Nếu không phải đang chèn tham chiếu -> chọn ô mục tiêu nếu click vào ô mục tiêu
+    // Náº¿u khÃ´ng pháº£i Ä‘ang chÃ¨n tham chiáº¿u -> chá»n Ã´ má»¥c tiÃªu náº¿u click vÃ o Ã´ má»¥c tiÃªu
     if (target) {
       setActiveRef(target.ref);
       const val = currentInputs[target.ref] ?? '';
@@ -414,24 +420,26 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-      {/* Cột trái: Danh sách bài Lab tương tác */}
-      <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 space-y-4 h-fit">
+    /* Layout tá»•ng: flex row â€” [danh sÃ¡ch bÃ i] | [áº£nh Ä‘á»] | [sheet thá»±c hÃ nh] */
+    <div className="flex gap-4 h-full min-h-0">
+
+      {/* â•â•â• Cá»˜T 1: Danh sÃ¡ch bÃ i Lab â•â•â• */}
+      <div className="w-56 shrink-0 bg-white rounded-2xl border border-slate-200 p-4 space-y-4 h-fit">
         <div>
           <h3 className="font-bold text-slate-900 text-sm">
-            Thực hành gõ công thức ({progress.completedInteractiveLabs.length}/{LABS.length})
+            Thá»±c hÃ nh cÃ´ng thá»©c ({progress.completedInteractiveLabs.length}/{LABS.length})
           </h3>
           <p className="text-xs text-slate-500 mt-0.5">
-            Hỗ trợ kéo chuột chọn vùng, phím F4 cố định $, kéo góc ô để copy công thức.
+            Há»— trá»£ kÃ©o chá»n vÃ¹ng, F4 cá»‘ Ä‘á»‹nh $, kÃ©o gÃ³c copy cÃ´ng thá»©c.
           </p>
         </div>
 
         <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
           {(
             [
-              { id: 'all', label: 'Tất cả' },
-              { id: 'exam', label: '5 Đề ảnh' },
-              { id: 'lesson', label: 'Bài hàm' },
+              { id: 'all', label: 'Táº¥t cáº£' },
+              { id: 'exam', label: '5 Äá»' },
+              { id: 'lesson', label: 'HÃ m' },
             ] as const
           ).map((f) => (
             <button
@@ -479,9 +487,73 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
         </div>
       </div>
 
-      {/* Cột phải: Bảng tính tương tác HyperFormula */}
-      <div className="lg:col-span-8 space-y-4">
+      {/* â•â•â• Cá»˜T 2: áº¢nh Ä‘á» bÃ i (cÃ³ thá»ƒ thu gá»n) â•â•â• */}
+      {lab.imageUrl && (
+        <div
+          className={`shrink-0 flex flex-col transition-all duration-200 ${
+            showDePane ? 'w-80' : 'w-10'
+          }`}
+        >
+          {/* Header cá»™t Ä‘á» */}
+          <div className="flex items-center justify-between bg-white rounded-2xl border border-slate-200 px-3 py-2 mb-2">
+            {showDePane && (
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex-1">
+                Äá» bÃ i
+              </span>
+            )}
+            {showDePane && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setDeZoom((z) => Math.max(0.5, +(z - 0.2).toFixed(1)))}
+                  className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                  title="Thu nhá»"
+                >
+                  <ZoomOut className="w-3.5 h-3.5" />
+                </button>
+                <span className="text-[11px] font-semibold text-slate-600 w-10 text-center">
+                  {Math.round(deZoom * 100)}%
+                </span>
+                <button
+                  onClick={() => setDeZoom((z) => Math.min(2.5, +(z + 0.2).toFixed(1)))}
+                  className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                  title="PhÃ³ng to"
+                >
+                  <ZoomIn className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+            {/* NÃºt Ä‘Ã³ng/má»Ÿ cá»™t Ä‘á» */}
+            <button
+              onClick={() => setShowDePane((v) => !v)}
+              className="p-1 ml-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+              title={showDePane ? 'Thu gá»n Ä‘á» bÃ i' : 'Má»Ÿ rá»™ng Ä‘á» bÃ i'}
+            >
+              {showDePane ? (
+                <ChevronLeft className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronRight className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+
+          {/* áº¢nh Ä‘á» */}
+          {showDePane && (
+            <div className="flex-1 bg-white rounded-2xl border border-slate-200 p-3 overflow-auto max-h-[calc(100vh-200px)]">
+              <img
+                src={lab.imageUrl}
+                alt={lab.title}
+                style={{ width: `${deZoom * 100}%`, maxWidth: 'none' }}
+                className="rounded-lg mx-auto block transition-all"
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* â•â•â• Cá»˜T 3: Sheet thá»±c hÃ nh â•â•â• */}
+      <div className="flex-1 min-w-0 space-y-4">
         <div className="bg-white rounded-2xl p-5 border border-slate-200 space-y-4">
+          {/* TiÃªu Ä‘á» bÃ i + toggle lÃ½ thuyáº¿t */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
             <div>
               <span className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold mb-1">
@@ -491,41 +563,26 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{lab.description}</p>
             </div>
 
-            <div className="flex flex-wrap gap-2 shrink-0">
-              {lab.theoryPoints && lab.theoryPoints.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setShowTheory((v) => !v)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors ${
-                    showTheory
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                  }`}
-                >
-                  <BookOpen className="w-3.5 h-3.5" /> Lý thuyết trọng tâm
-                </button>
-              )}
-              {lab.imageUrl && (
-                <button
-                  type="button"
-                  onClick={() => setShowImage((v) => !v)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors ${
-                    showImage
-                      ? 'bg-amber-600 text-white border-amber-600'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                  }`}
-                >
-                  <ImageIcon className="w-3.5 h-3.5" /> Ảnh đề gốc
-                </button>
-              )}
-            </div>
+            {lab.theoryPoints && lab.theoryPoints.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowTheory((v) => !v)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors shrink-0 ${
+                  showTheory
+                    ? 'bg-indigo-600 text-white border-indigo-600'
+                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" /> LÃ½ thuyáº¿t trá»ng tÃ¢m
+              </button>
+            )}
           </div>
 
-          {/* Khối Lý thuyết trọng tâm */}
+          {/* Khá»‘i LÃ½ thuyáº¿t trá»ng tÃ¢m */}
           {showTheory && lab.theoryPoints && lab.theoryPoints.length > 0 && (
             <div className="bg-indigo-50/60 rounded-xl p-4 border border-indigo-100 space-y-2.5">
               <div className="text-xs font-bold text-indigo-800 uppercase flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5" /> Lý thuyết trọng tâm cần nhớ
+                <BookOpen className="w-3.5 h-3.5" /> LÃ½ thuyáº¿t trá»ng tÃ¢m cáº§n nhá»›
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                 {lab.theoryPoints.map((tp, idx) => (
@@ -540,7 +597,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                     <p className="text-xs text-slate-600 leading-snug">{tp.explanation}</p>
                     {tp.tip && (
                       <p className="text-[11px] text-amber-700 font-medium">
-                        Mẹo: {tp.tip}
+                        Máº¹o: {tp.tip}
                       </p>
                     )}
                   </div>
@@ -549,20 +606,9 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
             </div>
           )}
 
-          {/* Ảnh đề gốc đối chiếu */}
-          {showImage && lab.imageUrl && (
-            <div className="bg-slate-100 rounded-xl p-3 border border-slate-200">
-              <img
-                src={lab.imageUrl}
-                alt={lab.title}
-                className="max-h-96 mx-auto rounded-lg shadow-xs object-contain"
-              />
-            </div>
-          )}
-
-          {/* Hướng dẫn từng câu */}
+          {/* HÆ°á»›ng dáº«n tá»«ng cÃ¢u */}
           <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-100 space-y-1">
-            <div className="text-xs font-bold text-slate-700 uppercase">Yêu cầu bài tập:</div>
+            <div className="text-xs font-bold text-slate-700 uppercase">YÃªu cáº§u bÃ i táº­p:</div>
             <ul className="list-disc pl-5 text-xs sm:text-sm text-slate-700 space-y-1">
               {lab.instructions.map((ins, i) => (
                 <li key={i}>{ins}</li>
@@ -570,14 +616,14 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
             </ul>
           </div>
 
-          {/* Mẹo thao tác nhanh */}
+          {/* Máº¹o thao tÃ¡c nhanh */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-600 bg-indigo-50/70 px-3 py-2 rounded-xl border border-indigo-100">
             <span className="inline-flex items-center gap-1 font-semibold text-indigo-700">
-              <MousePointerClick className="w-3.5 h-3.5" /> Mẹo thao tác:
+              <MousePointerClick className="w-3.5 h-3.5" /> Máº¹o thao tÃ¡c:
             </span>
-            <span>Gõ <code className="bg-white px-1 rounded">=</code> rồi <strong>click/kéo chuột</strong> trên bảng để chọn vùng</span>
-            <span>• Nhấn <strong>F4</strong> để khóa <code className="bg-white px-1 rounded">$</code></span>
-            <span>• Kéo ô vuông góc dưới phải để copy công thức</span>
+            <span>GÃµ <code className="bg-white px-1 rounded">=</code> rá»“i <strong>click/kÃ©o chuá»™t</strong> trÃªn báº£ng Ä‘á»ƒ chá»n vÃ¹ng</span>
+            <span>â€¢ Nháº¥n <strong>F4</strong> Ä‘á»ƒ khÃ³a <code className="bg-white px-1 rounded">$</code></span>
+            <span>â€¢ KÃ©o Ã´ vuÃ´ng gÃ³c dÆ°á»›i pháº£i Ä‘á»ƒ copy cÃ´ng thá»©c</span>
           </div>
 
           {/* Thanh Formula Bar + Autocomplete */}
@@ -613,8 +659,8 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 onKeyDown={handleFormulaKeyDown}
                 placeholder={
                   activeTarget
-                    ? `Nhập công thức cho ô ${activeTarget.ref} (ví dụ: =SUM( và kéo vùng)...`
-                    : 'Click vào một ô màu xanh để nhập công thức'
+                    ? `Nháº­p cÃ´ng thá»©c cho Ã´ ${activeTarget.ref} (vÃ­ dá»¥: =SUM( vÃ  kÃ©o vÃ¹ng)...`
+                    : 'Click vÃ o má»™t Ã´ mÃ u xanh Ä‘á»ƒ nháº­p cÃ´ng thá»©c'
                 }
                 className="flex-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-slate-50 disabled:text-slate-400"
               />
@@ -623,13 +669,13 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 disabled={!activeTarget || !activeFormula.startsWith('=')}
                 onClick={handleF4Lock}
                 className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 disabled:opacity-40 shrink-0"
-                title="Chuyển đổi địa chỉ tuyệt đối $ (F4)"
+                title="Chuyá»ƒn Ä‘á»•i Ä‘á»‹a chá»‰ tuyá»‡t Ä‘á»‘i $ (F4)"
               >
                 <Lock className="w-3.5 h-3.5 text-indigo-600" /> F4 ($)
               </button>
             </div>
 
-            {/* Dropdown gợi ý tên hàm */}
+            {/* Dropdown gá»£i Ã½ tÃªn hÃ m */}
             {matchingFunctions.length > 0 && (
               <div className="bg-white border border-slate-200 rounded-xl shadow-md p-1.5 flex flex-wrap gap-1.5">
                 {matchingFunctions.map((fn) => (
@@ -644,14 +690,14 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                   >
                     <span className="font-bold text-emerald-700">{fn.name}</span>
                     <span className="text-slate-400 ml-1.5 hidden sm:inline">
-                      — {fn.description}
+                      â€” {fn.description}
                     </span>
                   </button>
                 ))}
               </div>
             )}
 
-            {/* Thanh hướng dẫn đối số của hàm đang mở */}
+            {/* Thanh hÆ°á»›ng dáº«n Ä‘á»‘i sá»‘ cá»§a hÃ m Ä‘ang má»Ÿ */}
             {autocompleteCtx.activeFunc && (
               <div className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-100 text-xs font-mono flex flex-wrap items-center gap-1">
                 <span className="font-bold text-emerald-400">
@@ -678,7 +724,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
             )}
           </div>
 
-          {/* Lưới bảng tính */}
+          {/* LÆ°á»›i báº£ng tÃ­nh */}
           <div className="overflow-x-auto border border-slate-200 rounded-xl">
             <table className="min-w-full text-xs border-collapse select-none">
               <thead>
@@ -707,7 +753,6 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                       const val = computedGrid[rIdx]?.[cIdx];
                       const refHighlight = getHighlightClass(rIdx, cIdx);
 
-                      // Khung preview khi kéo Fill Handle
                       const inFillPreview =
                         fillDrag &&
                         cIdx === fillDrag.sourceCol &&
@@ -769,7 +814,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                             )}
                           </div>
 
-                          {/* Fill Handle ở góc dưới phải ô đang chọn */}
+                          {/* Fill Handle á»Ÿ gÃ³c dÆ°á»›i pháº£i Ã´ Ä‘ang chá»n */}
                           {isActive && activeFormula.startsWith('=') && (
                             <div
                               onMouseDown={(e) => {
@@ -783,7 +828,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                                   currentCol: cIdx,
                                 });
                               }}
-                              title="Kéo xuống các ô bên dưới để sao chép công thức"
+                              title="KÃ©o xuá»‘ng cÃ¡c Ã´ bÃªn dÆ°á»›i Ä‘á»ƒ sao chÃ©p cÃ´ng thá»©c"
                               className="w-2.5 h-2.5 bg-emerald-600 border border-white absolute -bottom-1 -right-1 cursor-crosshair z-10"
                             />
                           )}
@@ -796,11 +841,11 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
             </table>
           </div>
 
-          {/* Gợi ý & Hành động */}
+          {/* Gá»£i Ã½ & HÃ nh Ä‘á»™ng */}
           {showHint && activeTarget && (
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center justify-between gap-2">
               <div>
-                Gợi ý cho ô <strong>{activeTarget.ref}</strong>:{' '}
+                Gá»£i Ã½ cho Ã´ <strong>{activeTarget.ref}</strong>:{' '}
                 <code className="px-1.5 py-0.5 rounded bg-white border border-amber-200 font-mono">
                   {activeTarget.hint}
                 </code>
@@ -815,7 +860,7 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 }
                 className="px-2.5 py-1 rounded-lg bg-amber-600 text-white font-semibold hover:bg-amber-700 shrink-0"
               >
-                Áp dụng
+                Ãp dá»¥ng
               </button>
             </div>
           )}
@@ -832,16 +877,16 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 <>
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>
-                    Xuất sắc! Bạn đã hoàn thành đúng {correctCount}/{lab.targets.length} ô công
-                    thức.
+                    Xuáº¥t sáº¯c! Báº¡n Ä‘Ã£ hoÃ n thÃ nh Ä‘Ãºng {correctCount}/{lab.targets.length} Ã´ cÃ´ng
+                    thá»©c.
                   </span>
                 </>
               ) : (
                 <>
                   <XCircle className="w-4 h-4 shrink-0" />
                   <span>
-                    Đúng {correctCount}/{lab.targets.length} ô. Lưu ý mọi ô cần bắt đầu bằng dấu
-                    &quot;=&quot; và đúng vùng tham chiếu.
+                    ÄÃºng {correctCount}/{lab.targets.length} Ã´. LÆ°u Ã½ má»i Ã´ cáº§n báº¯t Ä‘áº§u báº±ng dáº¥u
+                    &quot;=&quot; vÃ  Ä‘Ãºng vÃ¹ng tham chiáº¿u.
                   </span>
                 </>
               )}
@@ -854,13 +899,13 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 onClick={handleCheck}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-colors"
               >
-                <Play className="w-4 h-4" /> Kiểm tra kết quả
+                <Play className="w-4 h-4" /> Kiá»ƒm tra káº¿t quáº£
               </button>
               <button
                 onClick={() => setShowHint((v) => !v)}
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs sm:text-sm font-semibold transition-colors"
               >
-                <HelpCircle className="w-4 h-4" /> Gợi ý ô {activeRef || ''}
+                <HelpCircle className="w-4 h-4" /> Gá»£i Ã½ Ã´ {activeRef || ''}
               </button>
             </div>
 
@@ -869,13 +914,13 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                 onClick={handleFillSample}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
               >
-                <Sparkles className="w-3.5 h-3.5" /> Điền đáp án mẫu
+                <Sparkles className="w-3.5 h-3.5" /> Äiá»n Ä‘Ã¡p Ã¡n máº«u
               </button>
               <button
                 onClick={handleReset}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
               >
-                <RotateCcw className="w-3.5 h-3.5" /> Làm lại
+                <RotateCcw className="w-3.5 h-3.5" /> LÃ m láº¡i
               </button>
             </div>
           </div>
