@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useBlocker } from 'react-router-dom';
 import {
   AlertCircle,
   AlertTriangle,
@@ -69,19 +68,18 @@ const EXAM_PRESETS: ExamPreset[] = [
   })),
 ];
 
-/* ─── Toast cảnh báo tạm thời ─────────────────────────────────────── */
 interface ViolationToast {
   id: number;
   message: string;
 }
 
-/* ─── Modal xác nhận thoát ─────────────────────────────────────────── */
+/* ─── Modal xác nhận thoát (dùng popstate) ─────────────────────────── */
 function ConfirmLeaveModal({
-  onConfirm,
-  onCancel,
+  onStay,
+  onLeave,
 }: {
-  onConfirm: () => void;
-  onCancel: () => void;
+  onStay: () => void;
+  onLeave: () => void;
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -102,13 +100,13 @@ function ConfirmLeaveModal({
         </p>
         <div className="flex gap-3">
           <button
-            onClick={onCancel}
+            onClick={onStay}
             className="flex-1 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
           >
             Ở lại thi tiếp
           </button>
           <button
-            onClick={onConfirm}
+            onClick={onLeave}
             className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold transition-colors"
           >
             Vẫn thoát
@@ -129,10 +127,11 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
 
-  /* ── Ràng buộc thi: trạng thái vi phạm ── */
-  const [violations, setViolations] = useState(0);       // số lần rời tab
-  const [toasts, setToasts] = useState<ViolationToast[]>([]); // danh sách toast
-  const [tabHidden, setTabHidden] = useState(false);     // đang ẩn tab
+  /* ── Ràng buộc thi ── */
+  const [violations, setViolations] = useState(0);
+  const [toasts, setToasts] = useState<ViolationToast[]>([]);
+  const [tabHidden, setTabHidden] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
   const toastIdRef = useRef(0);
   const isRunning = status === 'running';
 
@@ -165,9 +164,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
         setTabHidden(true);
         setViolations((v) => {
           const next = v + 1;
-          addToast(
-            `⚠️ Vi phạm #${next}: Bạn đã rời khỏi tab thi! Hành vi này bị ghi nhận.`
-          );
+          addToast(`⚠️ Vi phạm #${next}: Bạn đã rời khỏi tab thi! Hành vi này bị ghi nhận.`);
           return next;
         });
       } else {
@@ -178,8 +175,41 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
     return () => document.removeEventListener('visibilitychange', handler);
   }, [isRunning, addToast]);
 
-  /* ── 3. Chặn điều hướng React Router (sang trang khác trong app) ── */
-  const blocker = useBlocker(isRunning);
+  /* ── 3. Chặn Back/Forward của trình duyệt (popstate) ── */
+  useEffect(() => {
+    if (!isRunning) return;
+    // Thêm 1 entry lịch sử giả để có thể "bắt" nút back
+    window.history.pushState({ examGuard: true }, '');
+    const handler = (e: PopStateEvent) => {
+      if (e.state?.examGuard) return; // ignore guard state itself
+      // Người dùng nhấn Back → đẩy lại trạng thái và hiện modal
+      window.history.pushState({ examGuard: true }, '');
+      setShowLeaveModal(true);
+    };
+    window.addEventListener('popstate', handler);
+    return () => {
+      window.removeEventListener('popstate', handler);
+    };
+  }, [isRunning]);
+
+  /* ── 4. Chặn click menu sidebar (intercept link click khi đang thi) ── */
+  useEffect(() => {
+    if (!isRunning) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('a[href]') as HTMLAnchorElement | null;
+      if (!link) return;
+      const href = link.getAttribute('href') ?? '';
+      // Nếu là link nội bộ (không phải external)
+      if (href.startsWith('/') || href.startsWith('#')) {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowLeaveModal(true);
+      }
+    };
+    document.addEventListener('click', handler, true);
+    return () => document.removeEventListener('click', handler, true);
+  }, [isRunning]);
 
   /* ── Đếm ngược thời gian ── */
   useEffect(() => {
@@ -260,6 +290,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
     setViolations(0);
     setToasts([]);
     setTabHidden(false);
+    setShowLeaveModal(false);
     setStatus('running');
   };
 
@@ -332,9 +363,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
           <div className="flex items-center gap-4">
             <div
               className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-                percent >= 70
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : 'bg-amber-100 text-amber-700'
+                percent >= 70 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
               }`}
             >
               <Trophy className="w-7 h-7" />
@@ -352,7 +381,6 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
               )}
             </div>
           </div>
-
           <div className="flex gap-2.5">
             <button
               onClick={() => startExam(selectedPreset)}
@@ -369,7 +397,6 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
           </div>
         </div>
 
-        {/* Chi tiết đáp án */}
         <div className="space-y-3">
           <h3 className="font-bold text-slate-900">Xem lại chi tiết bài làm</h3>
           {questions.map((q, idx) => {
@@ -424,17 +451,20 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
 
   return (
     <>
-      {/* ── Modal xác nhận thoát (React Router blocker) ── */}
-      {blocker.state === 'blocked' && (
+      {/* ── Modal xác nhận thoát ── */}
+      {showLeaveModal && (
         <ConfirmLeaveModal
-          onConfirm={() => blocker.proceed()}
-          onCancel={() => blocker.reset()}
+          onStay={() => setShowLeaveModal(false)}
+          onLeave={() => {
+            setShowLeaveModal(false);
+            setStatus('idle');
+          }}
         />
       )}
 
-      {/* ── Banner cảnh báo khi tab bị ẩn ── */}
+      {/* ── Overlay khi tab bị ẩn ── */}
       {tabHidden && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm pointer-events-none">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 pointer-events-none">
           <div className="bg-rose-600 text-white rounded-2xl px-8 py-6 text-center shadow-2xl">
             <EyeOff className="w-10 h-10 mx-auto mb-2" />
             <p className="font-bold text-lg">Tab đang bị ẩn!</p>
@@ -448,7 +478,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className="bg-rose-600 text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-lg flex items-start gap-2 animate-in slide-in-from-right"
+            className="bg-rose-600 text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-lg flex items-start gap-2"
           >
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{t.message}</span>
@@ -459,7 +489,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Khung câu hỏi chính */}
         <div className="lg:col-span-2 space-y-4">
-          {/* Header: tiêu đề + đồng hồ + badge vi phạm */}
+          {/* Header: tiêu đề + badge vi phạm + đồng hồ */}
           <div className="bg-white rounded-2xl p-4 border border-slate-200 flex items-center justify-between gap-3">
             <div className="text-sm font-semibold text-slate-700 truncate">
               {selectedPreset.title}
@@ -476,9 +506,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
               )}
               <div
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-sm ${
-                  secondsLeft < 120
-                    ? 'bg-rose-100 text-rose-700'
-                    : 'bg-indigo-50 text-indigo-700'
+                  secondsLeft < 120 ? 'bg-rose-100 text-rose-700' : 'bg-indigo-50 text-indigo-700'
                 }`}
               >
                 <Clock className="w-4 h-4" />
@@ -517,9 +545,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
                   return (
                     <button
                       key={oIdx}
-                      onClick={() =>
-                        setAnswers((prev) => ({ ...prev, [currentIdx]: oIdx }))
-                      }
+                      onClick={() => setAnswers((prev) => ({ ...prev, [currentIdx]: oIdx }))}
                       className={`w-full text-left px-4 py-3 rounded-xl border text-sm sm:text-base transition-all flex items-start gap-3 ${
                         selected
                           ? 'border-indigo-600 bg-indigo-50 text-indigo-900 font-medium'
@@ -543,9 +569,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
                 </button>
                 <button
                   disabled={currentIdx >= questions.length - 1}
-                  onClick={() =>
-                    setCurrentIdx((i) => Math.min(questions.length - 1, i + 1))
-                  }
+                  onClick={() => setCurrentIdx((i) => Math.min(questions.length - 1, i + 1))}
                   className="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium disabled:opacity-40 hover:bg-slate-800"
                 >
                   Câu tiếp →
@@ -569,12 +593,10 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
               const isCurrent = idx === currentIdx;
               const isAnswered = answers[idx] !== undefined;
               const isFlagged = flagged[idx];
-
               let cls = 'bg-slate-100 text-slate-600 border-transparent';
               if (isAnswered) cls = 'bg-emerald-100 text-emerald-800 border-emerald-300';
               if (isFlagged) cls = 'bg-amber-100 text-amber-800 border-amber-400';
               if (isCurrent) cls += ' ring-2 ring-indigo-600';
-
               return (
                 <button
                   key={idx}
@@ -598,7 +620,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
             <div className="flex items-center gap-2 text-xs text-rose-700 bg-rose-50 p-2.5 rounded-xl">
               <EyeOff className="w-4 h-4 shrink-0" />
               <span>
-                Đã ghi nhận <strong>{violations}</strong> lần rời tab trong bài thi này.
+                Đã ghi nhận <strong>{violations}</strong> lần rời tab trong bài thi.
               </span>
             </div>
           )}
@@ -611,7 +633,7 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
           </button>
         </div>
 
-        {/* Thanh điều hướng nhanh dính dưới đáy cho điện thoại */}
+        {/* Thanh điều hướng nhanh cho điện thoại */}
         <div className="lg:hidden sticky bottom-16 z-20 bg-white/95 backdrop-blur border border-slate-200 rounded-2xl p-2 shadow-md flex items-center justify-between gap-2">
           <button
             disabled={currentIdx === 0}
@@ -621,17 +643,13 @@ export const MockExamPage: React.FC<MockExamPageProps> = ({ onSaveExam }) => {
             ← Trước
           </button>
           <span className="text-xs font-bold text-slate-700">
-            {currentIdx + 1}/{questions.length} •{' '}
-            {violations > 0 && (
-              <span className="text-rose-600">{violations}⚠ •</span>
-            )}{' '}
-            {formatSeconds(secondsLeft)}
+            {currentIdx + 1}/{questions.length}
+            {violations > 0 && <span className="text-rose-600"> • {violations}⚠</span>}
+            {' • '}{formatSeconds(secondsLeft)}
           </span>
           <button
             disabled={currentIdx >= questions.length - 1}
-            onClick={() =>
-              setCurrentIdx((i) => Math.min(questions.length - 1, i + 1))
-            }
+            onClick={() => setCurrentIdx((i) => Math.min(questions.length - 1, i + 1))}
             className="px-3 py-2 rounded-xl bg-slate-900 text-white text-xs font-semibold disabled:opacity-40"
           >
             Tiếp →
