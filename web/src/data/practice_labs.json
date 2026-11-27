@@ -1,0 +1,148 @@
+[
+  {
+    "id": "word-lab-01",
+    "subject": "word",
+    "title": "Bài thực hành Word 01: Soạn thảo Đơn xin mở lớp (Phần 1–4)",
+    "description": "Thực hành thiết lập trang A4, font Times New Roman, Tab Stop, Watermark, Drop Cap, chèn hình Behind Text và xuất PDF.",
+    "images": [
+      "/materials/images/word_1.jpg",
+      "/materials/images/word_2.jpg",
+      "/materials/images/word_3.jpg"
+    ],
+    "tasks": [
+      "Câu 1: Tạo file xulyvanban01.docx, font Times New Roman 13pt, lề trên/dưới/phải 2cm, lề trái 2.5cm, khổ A4, giãn dòng Multiple 1.5, Before/After 5pt.",
+      "Câu 2: Lưu thành xulyvanban02.docx, soạn thảo mẫu Đơn xin mở lớp, sử dụng Tab Stop để tạo dấu chấm (....) thẳng hàng và gạch chân Double Underline màu đỏ.",
+      "Tạo Watermark chữ 'TT NGOẠI NGỮ - TIN HỌC HUMG', màu Red, font Times New Roman, cỡ 45, layout CONFIDENTIAL 1.",
+      "Câu 3: Lưu thành xulyvanban03.docx, chèn danh sách dấu tick (✓) các đại diện lớp ở cuối văn bản.",
+      "Câu 4: Lưu thành xulyvanban04.docx, tạo Drop Cap 4 dòng, chèn Shape/Logo chế độ Behind Text và xuất ra file xulyvanban.pdf."
+    ]
+  },
+  {
+    "id": "word-lab-02",
+    "subject": "word",
+    "title": "Bài thực hành Word 02: Vitamin và Khoáng chất (Đề thi mẫu)",
+    "description": "Thực hành khổ giấy A5 ngang, WordArt, Shapes, Bullets, Symbol, chia cột kết hợp Drop Cap và bảng biểu có trộn ô + chữ dọc.",
+    "images": [
+      "/materials/images/word_4.jpg"
+    ],
+    "tasks": [
+      "Định dạng trang in khổ A5 hướng ngang (Landscape), lề trái 2.5cm, phải/trên/dưới 2cm.",
+      "Chèn Shape tiêu đề phụ và WordArt 'Vitamin và khoáng chất' tạo dáng uốn cong.",
+      "Tạo danh sách Bullets hoa thị và chèn ký tự đặc biệt Symbol (Ω, ®).",
+      "Chia đoạn văn bản thành nhiều cột (Columns), tạo Drop Cap chữ 'D' và chèn hình ảnh con rùa.",
+      "Tạo bảng KẾT QUẢ HỌC TẬP: gộp ô ngang (Số tiết -> LT/TH), gộp ô dọc, xoay chữ đứng cột 'Số thứ tự'."
+    ]
+  },
+  {
+    "id": "ppt-lab-01",
+    "subject": "ppt",
+    "title": "Bài thực hành PowerPoint: Giới thiệu Trung tâm Ngoại ngữ - Tin học HUMG (3 Slides)",
+    "description": "Thực hành áp dụng Theme Essential, bố cục Slide, SmartArt Cycle & Hierarchy, Picture Style, Textbox, nền ảnh và hiệu ứng.",
+    "images": [
+      "/materials/images/ppt_1.jpg",
+      "/materials/images/ppt_2.jpg",
+      "/materials/images/ppt_3.jpg"
+    ],
+    "tasks": [
+      "Slide 1: Dùng Theme Essential, lưu file kynangtrinhchieu.pptx, Layout Title Slide, font Times New Roman 25pt, chèn ảnh và SmartArt Cycle Arrow Process (2014, 2020, 2015).",
+      "Slide 2: Nhân bản Slide 1, đổi Picture Style ảnh sang Soft Edge Oval, chèn số trang & Footer 'Tôi yêu HUMG', tiêu đề màu đỏ gạch chân, chèn ảnh ClipArt + 2 Textbox nền vàng viền xanh 3pt.",
+      "Slide 3: Nhân bản Slide 1, đổi Layout Title and Content, đặt ảnh nền ngôi sao, chèn SmartArt Horizontal Multi-Level Hierarchy (Khoá 66 -> SV đã thi/chưa thi/đã đạt/chưa đạt CĐR).",
+      "Thiết lập hiệu ứng chuyển trang (Transition) cho các slide và hiệu ứng Entrance (Animation) cho tiêu đề Slide 3."
+    ]
+  },
+  {
+    "id": "excel-lab-01",
+    "subject": "excel",
+    "title": "Bài tập Excel tổng hợp 01: Kết quả cuộc thi chạy Việt dã",
+    "description": "Luyện tập hàm chuỗi LEFT, dò tìm VLOOKUP/INDEX-MATCH kết hợp cột phụ, tính thời gian, sắp xếp, thống kê MIN/MAX có điều kiện và vẽ biểu đồ Bar.",
+    "images": [
+      "/materials/images/excel_1.jpg"
+    ],
+    "tasks": [
+      "Dùng ký tự đầu của Mã số dò bảng phụ lấy Tên nội dung thi.",
+      "Dựa vào ký tự đầu Mã số và cột Phái (Nam/Nữ) lấy thời gian Xuất phát.",
+      "Tính cột Thành tích = Về đích - Xuất phát.",
+      "Kẻ khung, tô màu nền bảng phụ và sắp xếp theo Nội dung thi, Thành tích.",
+      "Thống kê thành tích Maraton cao nhất/thấp nhất của Nam và Nữ; rút trích VĐV Nam sinh <= 1985; vẽ biểu đồ Bar."
+    ]
+  },
+  {
+    "id": "excel-lab-02",
+    "subject": "excel",
+    "title": "Bài tập Excel tổng hợp 02: Thẻ nhập xuất kho",
+    "description": "Luyện tập định dạng bảng tính, tính Trị giá, Chuyên chở, hàm IF tính Thuế theo ngưỡng 33.000.000 và các hàm SUM, MAX, MIN.",
+    "images": [
+      "/materials/images/excel_2.jpg"
+    ],
+    "tasks": [
+      "Trình bày bảng tính font Times New Roman 12pt, căn lề, kẻ viền chuẩn.",
+      "Tính Trị giá = Số lượng * Đơn giá; Chuyên chở = Số lượng * 400.",
+      "Dùng hàm IF tính Thuế: > 33.000.000 thì 7%, ngược lại 6%.",
+      "Chèn cột Tổng cộng = Trị giá + Thuế + Chuyên chở.",
+      "Tính Tổng, Lớn nhất, Nhỏ nhất và định dạng phân cách hàng ngàn."
+    ]
+  },
+  {
+    "id": "excel-lab-03",
+    "subject": "excel",
+    "title": "Bài tập Excel tổng hợp 03: Kết quả cuộc thi chạy Việt dã (Bản mở rộng)",
+    "description": "Thực hành lại quy trình xử lý bảng tính đa điều kiện, sắp xếp nhiều cấp, Advanced Filter và biểu đồ.",
+    "images": [
+      "/materials/images/excel_3.jpg"
+    ],
+    "tasks": [
+      "Nhập bảng dữ liệu chính xác với định dạng giờ (h:mm).",
+      "Hoàn thiện các cột Nội dung thi, Xuất phát, Thành tích bằng công thức.",
+      "Thực hiện Advanced Filter rút trích danh sách theo điều kiện Nam và Năm sinh <= 1985.",
+      "Hoàn thiện bảng thống kê và vẽ biểu đồ Bar."
+    ]
+  },
+  {
+    "id": "excel-lab-04",
+    "subject": "excel",
+    "title": "Bài tập Excel tổng hợp 04: Doanh số mặt hàng Tivi",
+    "description": "Luyện tập VLOOKUP, HLOOKUP kết hợp LEFT/RIGHT/VALUE, tính tỷ lệ hỗ trợ giảm giá, khuyến mãi và lọc dữ liệu.",
+    "images": [
+      "/materials/images/excel_4.jpg"
+    ],
+    "tasks": [
+      "Dựa vào ký tự đầu Mã số dò Bảng giá điền cột Hiệu.",
+      "Dựa vào 2 ký tự cuối Mã số chuyển sang số điền cột Kích cỡ.",
+      "Dùng INDEX/MATCH hoặc VLOOKUP+IF lấy Giá bán theo Mã số và Kích cỡ.",
+      "Điền tỷ lệ Hỗ trợ giảm theo hiệu Tivi và tiền Tặng theo kích cỡ.",
+      "Tính Còn lại và rút trích danh sách Tivi 32 inch hoặc giá bán > 20 triệu."
+    ]
+  },
+  {
+    "id": "excel-lab-05",
+    "subject": "excel",
+    "title": "Bài tập Excel tổng hợp 05: Bảng tính tiền lương",
+    "description": "Luyện tập hàm ngày tháng, hàm IF phân bậc chức vụ, VLOOKUP bảng tiền thưởng, thống kê SUM/AVERAGE/MAX/MIN và biểu đồ cột 3D.",
+    "images": [
+      "/materials/images/excel_5.jpg"
+    ],
+    "tasks": [
+      "Nhập bảng tính, lưu baithuchanhexcel.xlsx, định dạng tiền tệ nhóm phân cách.",
+      "Tính Số ngày làm = Ngày kết thúc - Ngày bắt đầu; tính Tổng, TB, Lớn nhất, Nhỏ nhất.",
+      "Tính Lương theo bậc = Hệ số (Trưởng phòng 4.0, Nhân viên 2.5) * Lương cơ bản ($K$2 = 2.430.000).",
+      "Dùng VLOOKUP điền Tiền thưởng; hàm IF thưởng thêm 200.000 nếu số ngày làm > 25.",
+      "Tính Tổng lương, định dạng VND, sắp xếp tăng dần và vẽ biểu đồ cột 3D."
+    ]
+  },
+  {
+    "id": "mock-test-udcnttcb",
+    "subject": "test",
+    "title": "Đề thi mẫu tổng hợp UDCNTTCB (Word + Excel + PowerPoint)",
+    "description": "Đề thi chuẩn 3 phần: Soạn thảo văn bản thông tin chung (3đ), Bảng tính tiền hàng + biểu đồ 3D-Pie (4đ), Trình chiếu Natural.pptx (3đ).",
+    "images": [
+      "/materials/images/test_1.jpg",
+      "/materials/images/test_2.jpg"
+    ],
+    "tasks": [
+      "Phần I (Word - 3đ): Soạn thông tin Học viện Nông nghiệp VN, Times New Roman 13pt, Margin chuẩn, Bullets, Comment tại mục Địa chỉ, đánh số trang Plain Number 3.",
+      "Phần II (Excel - 4đ): Nhập Bảng tính tiền hàng & Bảng phụ, đổi tên sheet 'Tiền hàng', dùng VLOOKUP điền Tên hàng & Đơn giá, tính Thành tiền & Tổng tiền.",
+      "Phần II (Excel - tiếp): Vẽ biểu đồ 3D-Pie tỷ lệ % Số lượng, Layout 1, Style 2; sắp xếp theo Tháng tăng dần và Số lượng giảm dần.",
+      "Phần III (PowerPoint - 3đ): Hiệu ứng chuyển trang Doors, Entrance Random Bars cho tiêu đề Slide 1, âm thanh Chime, chỉnh Saturation 100%, Bullets vuông đặc và thêm Notes Page Slide 2."
+    ]
+  }
+]

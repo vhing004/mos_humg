@@ -1,0 +1,599 @@
+"""
+Sinh dữ liệu bảng tính tương tác (Excel Interactive Formula Lab) cho HyperFormula.
+Bao gồm:
+- 5 bài luyện hàm trọng tâm (Bài 03 -> Bài 07)
+- Đầy đủ 5 đề ảnh bài tập Excel (excel_1.jpg -> excel_5.jpg) kèm Lý thuyết trọng tâm & Ảnh đề gốc
+- Phần Excel trong đề thi mẫu UDCNTTCB
+"""
+import json
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "web" / "src" / "data"
+
+
+def build_interactive_labs() -> list[dict]:
+    labs = [
+        # 1. Đề ảnh excel_1.jpg & excel_3.jpg: Việt dã
+        {
+            "id": "lab-excel-1-vietda",
+            "group": "exam",
+            "badge": "Đề ảnh 01 & 03",
+            "title": "Kết quả cuộc thi chạy Việt dã (excel_1.jpg & excel_3.jpg)",
+            "description": "Thực hành kết hợp LEFT + VLOOKUP lấy nội dung thi, VLOOKUP + IF tra giờ xuất phát theo Phái, tính thành tích (phút) và thống kê MAX/MIN.",
+            "imageUrl": "/materials/images/excel_1.jpg",
+            "theoryPoints": [
+                {
+                    "title": "1. Tách ký tự đầu & Dò bảng phụ",
+                    "syntax": "=VLOOKUP(LEFT(A4,1), $A$11:$D$13, 2, 0)",
+                    "explanation": "LEFT(A4,1) lấy ký tự đầu của Mã số ('M', 'B', 'C') để dò tìm chính xác (0) trong bảng Nội dung thi.",
+                    "tip": "Luôn nhấn F4 để khóa bảng phụ $A$11:$D$13 trước khi kéo công thức xuống."
+                },
+                {
+                    "title": "2. Dò tìm 2 điều kiện (Mã số + Phái)",
+                    "syntax": '=VLOOKUP(LEFT(A4,1), $A$11:$D$13, IF(C4="Nữ",3,4), 0)',
+                    "explanation": "Cột 3 là giờ xuất phát của Nữ, cột 4 là của Nam. Dùng hàm IF ở đối số col_index_num để chọn đúng cột.",
+                    "tip": "Kiểm tra đúng chính tả chữ \"Nữ\" có dấu tiếng Việt."
+                },
+                {
+                    "title": "3. Tính Thành tích (đơn vị phút)",
+                    "syntax": "=F4-E4",
+                    "explanation": "Trong bài này, thời gian Xuất phát và Về đích được quy đổi sẵn sang tổng số phút (ví dụ 8:49 = 529 phút) để bạn trừ trực tiếp.",
+                    "tip": "Trên Excel thật, nếu nhập dạng giờ hh:mm thì Thành tích = Về đích - Xuất phát và định dạng [h]:mm."
+                },
+                {
+                    "title": "4. Thống kê theo điều kiện & Rút trích",
+                    "syntax": "=MAX(G4:G9) / =MIN(G4:G9) / Advanced Filter",
+                    "explanation": "Lọc riêng nhóm Maraton hoặc dùng MAX/MIN trên vùng thành tích. Trên Excel desktop, dùng Data -> Sort nhiều cấp và Data -> Advanced Filter."
+                }
+            ],
+            "instructions": [
+                "Cột Nội dung thi (D4:D9): Dùng VLOOKUP kết hợp LEFT(A4,1) dò trong bảng $A$11:$D$13 lấy cột 2.",
+                "Cột Xuất phát (phút) (E4:E9): Dùng VLOOKUP kết hợp LEFT(A4,1) và IF(C4=\"Nữ\",3,4) lấy giờ xuất phát (đã quy đổi ra phút).",
+                "Cột Thành tích (phút) (G4:G9): Tính = Về đích - Xuất phát (F4-E4).",
+                "Ô H12 & I12: Tính Thành tích cao nhất (MAX) và thấp nhất (MIN) của cột Thành tích (G4:G9).",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+            "rows": [
+                ["Mã số", "Họ Tên", "Phái", "Nội dung thi", "Xuất phát (phút)", "Về đích (phút)", "Thành tích", "", ""],
+                ["", "", "", "", "6:00=360", "8:49=529", "", "", ""],
+                ["", "", "", "", "", "", "", "", ""],
+                ["M1", "Trần Tấn Tài", "Nam", None, None, 529, None, "", ""],
+                ["B2", "Lê Xuân An", "Nữ", None, None, 545, None, "", ""],
+                ["B3", "Lê Văn Toàn", "Nam", None, None, 537, None, "", ""],
+                ["C4", "Võ Thế Bảo", "Nam", None, None, 583, None, "", ""],
+                ["M5", "Lê Minh Tâm", "Nam", None, None, 550, None, "", ""],
+                ["C6", "Vũ Thị Liên", "Nữ", None, None, 592, None, "", ""],
+                ["Mã", "Nội dung thi", "Nữ (phút)", "Nam (phút)", "", "", "Thống kê chung", "Cao nhất", "Thấp nhất"],
+                ["M", "Maraton", 360, 390, "", "", "", "", ""],
+                ["B", "Đi bộ 20 km", 420, 450, "", "", "Tất cả VĐV", None, None],
+                ["C", "Chạy 10000 m", 510, 540, "", "", "", "", ""],
+            ],
+            "targets": [
+                {"row": 3, "col": 3, "ref": "D4", "expectedFormula": "=VLOOKUP(LEFT(A4,1),$A$11:$D$13,2,0)", "expectedValue": "Maraton", "hint": "=VLOOKUP(LEFT(A4,1),$A$11:$D$13,2,0)"},
+                {"row": 4, "col": 3, "ref": "D5", "expectedFormula": "=VLOOKUP(LEFT(A5,1),$A$11:$D$13,2,0)", "expectedValue": "Đi bộ 20 km", "hint": "=VLOOKUP(LEFT(A5,1),$A$11:$D$13,2,0)"},
+                {"row": 5, "col": 3, "ref": "D6", "expectedFormula": "=VLOOKUP(LEFT(A6,1),$A$11:$D$13,2,0)", "expectedValue": "Đi bộ 20 km", "hint": "=VLOOKUP(LEFT(A6,1),$A$11:$D$13,2,0)"},
+                {"row": 6, "col": 3, "ref": "D7", "expectedFormula": "=VLOOKUP(LEFT(A7,1),$A$11:$D$13,2,0)", "expectedValue": "Chạy 10000 m", "hint": "=VLOOKUP(LEFT(A7,1),$A$11:$D$13,2,0)"},
+                {"row": 7, "col": 3, "ref": "D8", "expectedFormula": "=VLOOKUP(LEFT(A8,1),$A$11:$D$13,2,0)", "expectedValue": "Maraton", "hint": "=VLOOKUP(LEFT(A8,1),$A$11:$D$13,2,0)"},
+                {"row": 8, "col": 3, "ref": "D9", "expectedFormula": "=VLOOKUP(LEFT(A9,1),$A$11:$D$13,2,0)", "expectedValue": "Chạy 10000 m", "hint": "=VLOOKUP(LEFT(A9,1),$A$11:$D$13,2,0)"},
+
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": '=VLOOKUP(LEFT(A4,1),$A$11:$D$13,IF(C4="Nữ",3,4),0)', "expectedValue": 390, "hint": '=VLOOKUP(LEFT(A4,1),$A$11:$D$13,IF(C4="Nữ",3,4),0)'},
+                {"row": 4, "col": 4, "ref": "E5", "expectedFormula": '=VLOOKUP(LEFT(A5,1),$A$11:$D$13,IF(C5="Nữ",3,4),0)', "expectedValue": 420, "hint": '=VLOOKUP(LEFT(A5,1),$A$11:$D$13,IF(C5="Nữ",3,4),0)'},
+                {"row": 5, "col": 4, "ref": "E6", "expectedFormula": '=VLOOKUP(LEFT(A6,1),$A$11:$D$13,IF(C6="Nữ",3,4),0)', "expectedValue": 450, "hint": '=VLOOKUP(LEFT(A6,1),$A$11:$D$13,IF(C6="Nữ",3,4),0)'},
+                {"row": 6, "col": 4, "ref": "E7", "expectedFormula": '=VLOOKUP(LEFT(A7,1),$A$11:$D$13,IF(C7="Nữ",3,4),0)', "expectedValue": 540, "hint": '=VLOOKUP(LEFT(A7,1),$A$11:$D$13,IF(C7="Nữ",3,4),0)'},
+                {"row": 7, "col": 4, "ref": "E8", "expectedFormula": '=VLOOKUP(LEFT(A8,1),$A$11:$D$13,IF(C8="Nữ",3,4),0)', "expectedValue": 390, "hint": '=VLOOKUP(LEFT(A8,1),$A$11:$D$13,IF(C8="Nữ",3,4),0)'},
+                {"row": 8, "col": 4, "ref": "E9", "expectedFormula": '=VLOOKUP(LEFT(A9,1),$A$11:$D$13,IF(C9="Nữ",3,4),0)', "expectedValue": 510, "hint": '=VLOOKUP(LEFT(A9,1),$A$11:$D$13,IF(C9="Nữ",3,4),0)'},
+
+                {"row": 3, "col": 6, "ref": "G4", "expectedFormula": "=F4-E4", "expectedValue": 139, "hint": "=F4-E4"},
+                {"row": 4, "col": 6, "ref": "G5", "expectedFormula": "=F5-E5", "expectedValue": 125, "hint": "=F5-E5"},
+                {"row": 5, "col": 6, "ref": "G6", "expectedFormula": "=F6-E6", "expectedValue": 87, "hint": "=F6-E6"},
+                {"row": 6, "col": 6, "ref": "G7", "expectedFormula": "=F7-E7", "expectedValue": 43, "hint": "=F7-E7"},
+                {"row": 7, "col": 6, "ref": "G8", "expectedFormula": "=F8-E8", "expectedValue": 160, "hint": "=F8-E8"},
+                {"row": 8, "col": 6, "ref": "G9", "expectedFormula": "=F9-E9", "expectedValue": 82, "hint": "=F9-E9"},
+
+                {"row": 11, "col": 7, "ref": "H12", "expectedFormula": "=MAX(G4:G9)", "expectedValue": 160, "hint": "=MAX(G4:G9)"},
+                {"row": 11, "col": 8, "ref": "I12", "expectedFormula": "=MIN(G4:G9)", "expectedValue": 43, "hint": "=MIN(G4:G9)"},
+            ],
+        },
+        # 2. Đề ảnh excel_2.jpg: Thẻ nhập xuất kho
+        {
+            "id": "lab-excel-2-kho",
+            "group": "exam",
+            "badge": "Đề ảnh 02",
+            "title": "Thẻ Nhập Xuất Kho (excel_2.jpg)",
+            "description": "Bài thực hành chuẩn từ ảnh đề excel_2.jpg: Trị giá, Chuyên chở, Thuế (IF > 33.000.000), Tổng cộng và SUM/MAX/MIN.",
+            "imageUrl": "/materials/images/excel_2.jpg",
+            "theoryPoints": [
+                {
+                    "title": "1. Phép tính cơ bản & Phân tách phần trăm",
+                    "syntax": "=D3*F3  và  =D3*400",
+                    "explanation": "Tính Trị giá = Số lượng * Đơn giá; Chuyên chở = Số lượng * 400."
+                },
+                {
+                    "title": "2. Hàm điều kiện IF tính Thuế theo ngưỡng",
+                    "syntax": "=IF(G3>33000000, G3*7%, G3*6%)",
+                    "explanation": "Nếu Trị giá > 33.000.000 thì thuế 7% (0.07), ngược lại (<= 33.000.000) thì thuế 6% (0.06).",
+                    "tip": "Không gõ dấu chấm ngăn cách hàng ngàn vào số 33000000 trong công thức."
+                },
+                {
+                    "title": "3. Tổng hợp SUM, MAX, MIN",
+                    "syntax": "=SUM(J3:J8) / =MAX(J3:J8) / =MIN(J3:J8)",
+                    "explanation": "Tính tổng, giá trị lớn nhất và nhỏ nhất cho cột Tổng cộng."
+                }
+            ],
+            "instructions": [
+                "Cột Trị giá (G3:G8): Số lượng * Đơn giá (D3*F3).",
+                "Cột Thuế (H3:H8): Nếu Trị giá > 33000000 thì Trị giá * 7%, ngược lại Trị giá * 6%.",
+                "Cột Chuyên chở (I3:I8): Số lượng * 400 (D3*400).",
+                "Cột Tổng cộng (J3:J8): Trị giá + Thuế + Chuyên chở.",
+                "Dòng 9 (Tổng): Dùng SUM cho G9, H9, I9, J9. Dòng 10–11: MAX và MIN cho cột J.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
+            "rows": [
+                ["TT", "Diễn giải", "Đơn vị", "Số lượng", "Tên kho", "Đơn giá", "Trị giá", "Thuế", "Chuyên chở", "Tổng cộng"],
+                ["", "", "", "", "", "", "", "", "", ""],
+                [1, "Gạo nàng hương", "Kg", 2000, "GNH", 15000, None, None, None, None],
+                [2, "Gạo nàng thơm", "Kg", 1580, "GNT", 15500, None, None, None, None],
+                [3, "Gạo tẻ", "Kg", 2200, "GT", 14800, None, None, None, None],
+                [4, "Gạo nếp", "Kg", 2700, "GN", 16800, None, None, None, None],
+                [5, "Bột mì Pháp", "Kg", 1500, "BMP", 17000, None, None, None, None],
+                [6, "Gạo ST24", "Kg", 1600, "ST24", 30000, None, None, None, None],
+                ["", "Tổng", "", "", "", "", None, None, None, None],
+                ["", "Lớn nhất", "", "", "", "", "", "", "", None],
+                ["", "Nhỏ nhất", "", "", "", "", "", "", "", None],
+            ],
+            "targets": [
+                {"row": 2, "col": 6, "ref": "G3", "expectedFormula": "=D3*F3", "expectedValue": 30000000, "hint": "=D3*F3"},
+                {"row": 3, "col": 6, "ref": "G4", "expectedFormula": "=D4*F4", "expectedValue": 24490000, "hint": "=D4*F4"},
+                {"row": 4, "col": 6, "ref": "G5", "expectedFormula": "=D5*F5", "expectedValue": 32560000, "hint": "=D5*F5"},
+                {"row": 5, "col": 6, "ref": "G6", "expectedFormula": "=D6*F6", "expectedValue": 45360000, "hint": "=D6*F6"},
+                {"row": 6, "col": 6, "ref": "G7", "expectedFormula": "=D7*F7", "expectedValue": 25500000, "hint": "=D7*F7"},
+                {"row": 7, "col": 6, "ref": "G8", "expectedFormula": "=D8*F8", "expectedValue": 48000000, "hint": "=D8*F8"},
+
+                {"row": 2, "col": 7, "ref": "H3", "expectedFormula": "=IF(G3>33000000,G3*0.07,G3*0.06)", "expectedValue": 1800000, "hint": "=IF(G3>33000000,G3*7%,G3*6%)"},
+                {"row": 3, "col": 7, "ref": "H4", "expectedFormula": "=IF(G4>33000000,G4*0.07,G4*0.06)", "expectedValue": 1469400, "hint": "=IF(G4>33000000,G4*7%,G4*6%)"},
+                {"row": 4, "col": 7, "ref": "H5", "expectedFormula": "=IF(G5>33000000,G5*0.07,G5*0.06)", "expectedValue": 1953600, "hint": "=IF(G5>33000000,G5*7%,G5*6%)"},
+                {"row": 5, "col": 7, "ref": "H6", "expectedFormula": "=IF(G6>33000000,G6*0.07,G6*0.06)", "expectedValue": 3175200, "hint": "=IF(G6>33000000,G6*7%,G6*6%)"},
+                {"row": 6, "col": 7, "ref": "H7", "expectedFormula": "=IF(G7>33000000,G7*0.07,G7*0.06)", "expectedValue": 1530000, "hint": "=IF(G7>33000000,G7*7%,G7*6%)"},
+                {"row": 7, "col": 7, "ref": "H8", "expectedFormula": "=IF(G8>33000000,G8*0.07,G8*0.06)", "expectedValue": 3360000, "hint": "=IF(G8>33000000,G8*7%,G8*6%)"},
+
+                {"row": 2, "col": 8, "ref": "I3", "expectedFormula": "=D3*400", "expectedValue": 800000, "hint": "=D3*400"},
+                {"row": 3, "col": 8, "ref": "I4", "expectedFormula": "=D4*400", "expectedValue": 632000, "hint": "=D4*400"},
+                {"row": 4, "col": 8, "ref": "I5", "expectedFormula": "=D5*400", "expectedValue": 880000, "hint": "=D5*400"},
+                {"row": 5, "col": 8, "ref": "I6", "expectedFormula": "=D6*400", "expectedValue": 1080000, "hint": "=D6*400"},
+                {"row": 6, "col": 8, "ref": "I7", "expectedFormula": "=D7*400", "expectedValue": 600000, "hint": "=D7*400"},
+                {"row": 7, "col": 8, "ref": "I8", "expectedFormula": "=D8*400", "expectedValue": 640000, "hint": "=D8*400"},
+
+                {"row": 2, "col": 9, "ref": "J3", "expectedFormula": "=G3+H3+I3", "expectedValue": 32600000, "hint": "=G3+H3+I3"},
+                {"row": 3, "col": 9, "ref": "J4", "expectedFormula": "=G4+H4+I4", "expectedValue": 26591400, "hint": "=G4+H4+I4"},
+                {"row": 4, "col": 9, "ref": "J5", "expectedFormula": "=G5+H5+I5", "expectedValue": 35393600, "hint": "=G5+H5+I5"},
+                {"row": 5, "col": 9, "ref": "J6", "expectedFormula": "=G6+H6+I6", "expectedValue": 49615200, "hint": "=G6+H6+I6"},
+                {"row": 6, "col": 9, "ref": "J7", "expectedFormula": "=G7+H7+I7", "expectedValue": 27630000, "hint": "=G7+H7+I7"},
+                {"row": 7, "col": 9, "ref": "J8", "expectedFormula": "=G8+H8+I8", "expectedValue": 52000000, "hint": "=G8+H8+I8"},
+
+                {"row": 8, "col": 6, "ref": "G9", "expectedFormula": "=SUM(G3:G8)", "expectedValue": 205910000, "hint": "=SUM(G3:G8)"},
+                {"row": 8, "col": 7, "ref": "H9", "expectedFormula": "=SUM(H3:H8)", "expectedValue": 13288200, "hint": "=SUM(H3:H8)"},
+                {"row": 8, "col": 8, "ref": "I9", "expectedFormula": "=SUM(I3:I8)", "expectedValue": 4632000, "hint": "=SUM(I3:I8)"},
+                {"row": 8, "col": 9, "ref": "J9", "expectedFormula": "=SUM(J3:J8)", "expectedValue": 223830200, "hint": "=SUM(J3:J8)"},
+                {"row": 9, "col": 9, "ref": "J10", "expectedFormula": "=MAX(J3:J8)", "expectedValue": 52000000, "hint": "=MAX(J3:J8)"},
+                {"row": 10, "col": 9, "ref": "J11", "expectedFormula": "=MIN(J3:J8)", "expectedValue": 26591400, "hint": "=MIN(J3:J8)"},
+            ],
+        },
+        # 3. Đề ảnh excel_4.jpg: Doanh số mặt hàng Tivi
+        {
+            "id": "lab-excel-4-tivi",
+            "group": "exam",
+            "badge": "Đề ảnh 04",
+            "title": "Doanh số mặt hàng Tivi (excel_4.jpg)",
+            "description": "Thực hành tổng hợp LEFT, VALUE(RIGHT), VLOOKUP tra bảng 2 chiều (kết hợp IF/MATCH), HLOOKUP lấy tiền tặng khuyến mãi và tính Còn lại.",
+            "imageUrl": "/materials/images/excel_4.jpg",
+            "theoryPoints": [
+                {
+                    "title": "1. Tách chuỗi sang Số bằng VALUE(RIGHT(...))",
+                    "syntax": "=VALUE(RIGHT(B3,2))",
+                    "explanation": "RIGHT(B3,2) trả về chuỗi \"21\". Phải bọc VALUE() để chuyển thành số 21 mới khớp được với tiêu đề cột 21, 32, 40 trong Bảng giá.",
+                    "tip": "Nếu quên VALUE(), hàm HLOOKUP hoặc IF(E3=21,...) sẽ trả về #N/A hoặc sai!"
+                },
+                {
+                    "title": "2. Dò bảng 2 chiều: VLOOKUP + IF (hoặc MATCH)",
+                    "syntax": "=VLOOKUP(LEFT(B3,1), $A$11:$F$13, IF(E3=21,4,IF(E3=32,5,6)), 0)",
+                    "explanation": "Dò dòng theo ký tự đầu Mã số ('S', 'P', 'T'), còn cột thì dùng IF theo Kích cỡ (21 -> cột 4, 32 -> cột 5, 40 -> cột 6)."
+                },
+                {
+                    "title": "3. Dò ngang HLOOKUP lấy tiền Tặng",
+                    "syntax": "=HLOOKUP(E3, $D$10:$F$14, 5, 0)",
+                    "explanation": "Bảng khuyến mãi theo kích cỡ (21, 32, 40) nằm theo hàng ngang ở D10:F14; dòng Khuyến mãi là hàng thứ 5."
+                },
+                {
+                    "title": "4. Tính Còn lại sau giảm giá & khuyến mãi",
+                    "syntax": "=F3*(1-G3)-H3",
+                    "explanation": "Còn lại = Giá bán - (Giá bán * Tỷ lệ hỗ trợ giảm) - Tiền tặng."
+                }
+            ],
+            "instructions": [
+                "Cột Hiệu (C3:C7): Dò ký tự đầu Mã số (LEFT(B3,1)) trong $A$11:$F$13 lấy cột 2.",
+                "Cột Kích cỡ (E3:E7): Dùng VALUE(RIGHT(B3,2)) lấy 2 số cuối.",
+                "Cột Giá bán (F3:F7): Dùng VLOOKUP theo LEFT(B3,1) trong $A$11:$F$13, cột lấy dùng IF(E3=21,4,IF(E3=32,5,6)).",
+                "Cột Hỗ trợ giảm (G3:G7): Dùng VLOOKUP theo LEFT(B3,1) lấy cột 3 trong $A$11:$F$13.",
+                "Cột Tặng (H3:H7): Dùng HLOOKUP(E3,$D$10:$F$14,5,0). Cột Còn lại (I3:I7): =F3*(1-G3)-H3.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+            "rows": [
+                ["STT", "MÃ SỐ", "HIỆU", "NGÀY BÁN", "KÍCH CỠ", "GIÁ BÁN", "HỖ TRỢ GIẢM", "TẶNG", "CÒN LẠI"],
+                ["", "", "", "", "", "", "", "", ""],
+                [1, "S21", None, "12/02/11", None, None, None, None, None],
+                [2, "S40", None, "24/02/11", None, None, None, None, None],
+                [3, "T32", None, "07/03/11", None, None, None, None, None],
+                [4, "P21", None, "18/03/11", None, None, None, None, None],
+                [5, "P40", None, "01/05/11", None, None, None, None, None],
+                ["", "", "", "", "", "", "", "", ""],
+                ["BẢNG GIÁ (1000đ)", "", "", "Kích cỡ (inch)", "", "", "", "", ""],
+                ["Mã số", "Hiệu", "Nhà SX hỗ trợ", 21, 32, 40, "", "", ""],
+                ["S", "Sony", 0.2, 2500, 10500, 20700, "", "", ""],
+                ["P", "Panasonic", 0.3, 1900, 9800, 18500, "", "", ""],
+                ["T", "Toshiba", 0.25, 2200, 9900, 19000, "", "", ""],
+                ["Khuyến mãi tặng", "", "", 200, 1000, 2000, "", "", ""],
+            ],
+            "targets": [
+                {"row": 2, "col": 2, "ref": "C3", "expectedFormula": "=VLOOKUP(LEFT(B3,1),$A$11:$F$13,2,0)", "expectedValue": "Sony", "hint": "=VLOOKUP(LEFT(B3,1),$A$11:$F$13,2,0)"},
+                {"row": 3, "col": 2, "ref": "C4", "expectedFormula": "=VLOOKUP(LEFT(B4,1),$A$11:$F$13,2,0)", "expectedValue": "Sony", "hint": "=VLOOKUP(LEFT(B4,1),$A$11:$F$13,2,0)"},
+                {"row": 4, "col": 2, "ref": "C5", "expectedFormula": "=VLOOKUP(LEFT(B5,1),$A$11:$F$13,2,0)", "expectedValue": "Toshiba", "hint": "=VLOOKUP(LEFT(B5,1),$A$11:$F$13,2,0)"},
+                {"row": 5, "col": 2, "ref": "C6", "expectedFormula": "=VLOOKUP(LEFT(B6,1),$A$11:$F$13,2,0)", "expectedValue": "Panasonic", "hint": "=VLOOKUP(LEFT(B6,1),$A$11:$F$13,2,0)"},
+                {"row": 6, "col": 2, "ref": "C7", "expectedFormula": "=VLOOKUP(LEFT(B7,1),$A$11:$F$13,2,0)", "expectedValue": "Panasonic", "hint": "=VLOOKUP(LEFT(B7,1),$A$11:$F$13,2,0)"},
+
+                {"row": 2, "col": 4, "ref": "E3", "expectedFormula": "=VALUE(RIGHT(B3,2))", "expectedValue": 21, "hint": "=VALUE(RIGHT(B3,2))"},
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": "=VALUE(RIGHT(B4,2))", "expectedValue": 40, "hint": "=VALUE(RIGHT(B4,2))"},
+                {"row": 4, "col": 4, "ref": "E5", "expectedFormula": "=VALUE(RIGHT(B5,2))", "expectedValue": 32, "hint": "=VALUE(RIGHT(B5,2))"},
+                {"row": 5, "col": 4, "ref": "E6", "expectedFormula": "=VALUE(RIGHT(B6,2))", "expectedValue": 21, "hint": "=VALUE(RIGHT(B6,2))"},
+                {"row": 6, "col": 4, "ref": "E7", "expectedFormula": "=VALUE(RIGHT(B7,2))", "expectedValue": 40, "hint": "=VALUE(RIGHT(B7,2))"},
+
+                {"row": 2, "col": 5, "ref": "F3", "expectedFormula": "=VLOOKUP(LEFT(B3,1),$A$11:$F$13,IF(E3=21,4,IF(E3=32,5,6)),0)", "expectedValue": 2500, "hint": "=VLOOKUP(LEFT(B3,1),$A$11:$F$13,IF(E3=21,4,IF(E3=32,5,6)),0)"},
+                {"row": 3, "col": 5, "ref": "F4", "expectedFormula": "=VLOOKUP(LEFT(B4,1),$A$11:$F$13,IF(E4=21,4,IF(E4=32,5,6)),0)", "expectedValue": 20700, "hint": "=VLOOKUP(LEFT(B4,1),$A$11:$F$13,IF(E4=21,4,IF(E4=32,5,6)),0)"},
+                {"row": 4, "col": 5, "ref": "F5", "expectedFormula": "=VLOOKUP(LEFT(B5,1),$A$11:$F$13,IF(E5=21,4,IF(E5=32,5,6)),0)", "expectedValue": 9900, "hint": "=VLOOKUP(LEFT(B5,1),$A$11:$F$13,IF(E5=21,4,IF(E5=32,5,6)),0)"},
+                {"row": 5, "col": 5, "ref": "F6", "expectedFormula": "=VLOOKUP(LEFT(B6,1),$A$11:$F$13,IF(E6=21,4,IF(E6=32,5,6)),0)", "expectedValue": 1900, "hint": "=VLOOKUP(LEFT(B6,1),$A$11:$F$13,IF(E6=21,4,IF(E6=32,5,6)),0)"},
+                {"row": 6, "col": 5, "ref": "F7", "expectedFormula": "=VLOOKUP(LEFT(B7,1),$A$11:$F$13,IF(E7=21,4,IF(E7=32,5,6)),0)", "expectedValue": 18500, "hint": "=VLOOKUP(LEFT(B7,1),$A$11:$F$13,IF(E7=21,4,IF(E7=32,5,6)),0)"},
+
+                {"row": 2, "col": 6, "ref": "G3", "expectedFormula": "=VLOOKUP(LEFT(B3,1),$A$11:$F$13,3,0)", "expectedValue": 0.2, "hint": "=VLOOKUP(LEFT(B3,1),$A$11:$F$13,3,0)"},
+                {"row": 3, "col": 6, "ref": "G4", "expectedFormula": "=VLOOKUP(LEFT(B4,1),$A$11:$F$13,3,0)", "expectedValue": 0.2, "hint": "=VLOOKUP(LEFT(B4,1),$A$11:$F$13,3,0)"},
+                {"row": 4, "col": 6, "ref": "G5", "expectedFormula": "=VLOOKUP(LEFT(B5,1),$A$11:$F$13,3,0)", "expectedValue": 0.25, "hint": "=VLOOKUP(LEFT(B5,1),$A$11:$F$13,3,0)"},
+                {"row": 5, "col": 6, "ref": "G6", "expectedFormula": "=VLOOKUP(LEFT(B6,1),$A$11:$F$13,3,0)", "expectedValue": 0.3, "hint": "=VLOOKUP(LEFT(B6,1),$A$11:$F$13,3,0)"},
+                {"row": 6, "col": 6, "ref": "G7", "expectedFormula": "=VLOOKUP(LEFT(B7,1),$A$11:$F$13,3,0)", "expectedValue": 0.3, "hint": "=VLOOKUP(LEFT(B7,1),$A$11:$F$13,3,0)"},
+
+                {"row": 2, "col": 7, "ref": "H3", "expectedFormula": "=HLOOKUP(E3,$D$10:$F$14,5,0)", "expectedValue": 200, "hint": "=HLOOKUP(E3,$D$10:$F$14,5,0)"},
+                {"row": 3, "col": 7, "ref": "H4", "expectedFormula": "=HLOOKUP(E4,$D$10:$F$14,5,0)", "expectedValue": 2000, "hint": "=HLOOKUP(E4,$D$10:$F$14,5,0)"},
+                {"row": 4, "col": 7, "ref": "H5", "expectedFormula": "=HLOOKUP(E5,$D$10:$F$14,5,0)", "expectedValue": 1000, "hint": "=HLOOKUP(E5,$D$10:$F$14,5,0)"},
+                {"row": 5, "col": 7, "ref": "H6", "expectedFormula": "=HLOOKUP(E6,$D$10:$F$14,5,0)", "expectedValue": 200, "hint": "=HLOOKUP(E6,$D$10:$F$14,5,0)"},
+                {"row": 6, "col": 7, "ref": "H7", "expectedFormula": "=HLOOKUP(E7,$D$10:$F$14,5,0)", "expectedValue": 2000, "hint": "=HLOOKUP(E7,$D$10:$F$14,5,0)"},
+
+                {"row": 2, "col": 8, "ref": "I3", "expectedFormula": "=F3*(1-G3)-H3", "expectedValue": 1800, "hint": "=F3*(1-G3)-H3"},
+                {"row": 3, "col": 8, "ref": "I4", "expectedFormula": "=F4*(1-G4)-H4", "expectedValue": 14560, "hint": "=F4*(1-G4)-H4"},
+                {"row": 4, "col": 8, "ref": "I5", "expectedFormula": "=F5*(1-G5)-H5", "expectedValue": 6425, "hint": "=F5*(1-G5)-H5"},
+                {"row": 5, "col": 8, "ref": "I6", "expectedFormula": "=F6*(1-G6)-H6", "expectedValue": 1130, "hint": "=F6*(1-G6)-H6"},
+                {"row": 6, "col": 8, "ref": "I7", "expectedFormula": "=F7*(1-G7)-H7", "expectedValue": 10950, "hint": "=F7*(1-G7)-H7"},
+            ],
+        },
+        # 4. Đề ảnh excel_5.jpg: Bảng tính tiền lương
+        {
+            "id": "lab-excel-5-luong",
+            "group": "exam",
+            "badge": "Đề ảnh 05",
+            "title": "Bảng Tính Tiền Lương (excel_5.jpg)",
+            "description": "Bài thực hành chuẩn từ ảnh đề excel_5.jpg: Số ngày làm, Lương theo bậc (IF + F4), VLOOKUP Tiền thưởng, Thưởng ngày công và Tổng lương.",
+            "imageUrl": "/materials/images/excel_5.jpg",
+            "theoryPoints": [
+                {
+                    "title": "1. Khóa ô cố định bằng phím F4 ($K$1)",
+                    "syntax": '=IF(B2="Trưởng phòng", 4, 2.5) * $K$1',
+                    "explanation": "Ô chứa Lương cơ bản (2.430.000) là ô dùng chung cho tất cả nhân viên. Phải nhấn F4 thành $K$1 để khi kéo Fill Handle không bị nhảy sang K2, K3."
+                },
+                {
+                    "title": "2. Dò Tiền thưởng bằng VLOOKUP",
+                    "syntax": "=VLOOKUP(A2, $A$10:$B$12, 2, 0)",
+                    "explanation": "Dò Mã nhân viên ('HC', 'KT', 'BV') trong Bảng tiền thưởng $A$10:$B$12, lấy cột 2, dò chính xác (0)."
+                },
+                {
+                    "title": "3. Thưởng theo ngày làm việc",
+                    "syntax": "=IF(E2>25, 200000, 0)",
+                    "explanation": "Nếu Số ngày làm > 25 thì thưởng 200.000, ngược lại 0."
+                }
+            ],
+            "instructions": [
+                "Cột Số ngày làm (E2:E7): = Ngày kết thúc - Ngày bắt đầu (D2-C2).",
+                "Cột Lương theo bậc (F2:F7): Nếu Chức vụ = 'Trưởng phòng' thì 4 * $K$1, ngược lại 2.5 * $K$1 (Lương CB K1 = 2430000).",
+                "Cột Tiền thưởng (G2:G7): VLOOKUP dựa vào Mã NV (A2:A7) trong bảng $A$10:$B$12.",
+                "Cột Thưởng ngày làm (H2:H7): Nếu Số ngày làm > 25 thì 200000, ngược lại 0.",
+                "Cột Tổng lương (I2:I7): Lương theo bậc + Tiền thưởng + Thưởng ngày làm.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"],
+            "rows": [
+                ["Mã NV", "Chức vụ", "Từ ngày", "Đến ngày", "Số ngày làm", "Lương theo bậc", "Tiền thưởng", "Thưởng ngày làm", "Tổng lương", "Lương CB:", 2430000],
+                ["HC", "Trưởng phòng", 1, 30, None, None, None, None, None, "", ""],
+                ["HC", "Nhân viên", 2, 25, None, None, None, None, None, "", ""],
+                ["KT", "Trưởng phòng", 10, 20, None, None, None, None, None, "", ""],
+                ["BV", "Trưởng phòng", 5, 30, None, None, None, None, None, "", ""],
+                ["KT", "Nhân viên", 6, 24, None, None, None, None, None, "", ""],
+                ["BV", "Nhân viên", 1, 28, None, None, None, None, None, "", ""],
+                ["", "", "", "", "", "", "", "", "", "", ""],
+                ["BẢNG TIỀN THƯỞNG", "", "", "", "", "", "", "", "", "", ""],
+                ["HC", 2000000, "", "", "", "", "", "", "", "", ""],
+                ["KT", 1500000, "", "", "", "", "", "", "", "", ""],
+                ["BV", 1300000, "", "", "", "", "", "", "", "", ""],
+            ],
+            "targets": [
+                {"row": 1, "col": 4, "ref": "E2", "expectedFormula": "=D2-C2", "expectedValue": 29, "hint": "=D2-C2"},
+                {"row": 2, "col": 4, "ref": "E3", "expectedFormula": "=D3-C3", "expectedValue": 23, "hint": "=D3-C3"},
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": "=D4-C4", "expectedValue": 10, "hint": "=D4-C4"},
+                {"row": 4, "col": 4, "ref": "E5", "expectedFormula": "=D5-C5", "expectedValue": 25, "hint": "=D5-C5"},
+                {"row": 5, "col": 4, "ref": "E6", "expectedFormula": "=D6-C6", "expectedValue": 18, "hint": "=D6-C6"},
+                {"row": 6, "col": 4, "ref": "E7", "expectedFormula": "=D7-C7", "expectedValue": 27, "hint": "=D7-C7"},
+
+                {"row": 1, "col": 5, "ref": "F2", "expectedFormula": '=IF(B2="Trưởng phòng",4,2.5)*$K$1', "expectedValue": 9720000, "hint": '=IF(B2="Trưởng phòng",4,2.5)*$K$1'},
+                {"row": 2, "col": 5, "ref": "F3", "expectedFormula": '=IF(B3="Trưởng phòng",4,2.5)*$K$1', "expectedValue": 6075000, "hint": '=IF(B3="Trưởng phòng",4,2.5)*$K$1'},
+                {"row": 3, "col": 5, "ref": "F4", "expectedFormula": '=IF(B4="Trưởng phòng",4,2.5)*$K$1', "expectedValue": 9720000, "hint": '=IF(B4="Trưởng phòng",4,2.5)*$K$1'},
+                {"row": 4, "col": 5, "ref": "F5", "expectedFormula": '=IF(B5="Trưởng phòng",4,2.5)*$K$1', "expectedValue": 9720000, "hint": '=IF(B5="Trưởng phòng",4,2.5)*$K$1'},
+                {"row": 5, "col": 5, "ref": "F6", "expectedFormula": '=IF(B6="Trưởng phòng",4,2.5)*$K$1', "expectedValue": 6075000, "hint": '=IF(B6="Trưởng phòng",4,2.5)*$K$1'},
+                {"row": 6, "col": 5, "ref": "F7", "expectedFormula": '=IF(B7="Trưởng phòng",4,2.5)*$K$1', "expectedValue": 6075000, "hint": '=IF(B7="Trưởng phòng",4,2.5)*$K$1'},
+
+                {"row": 1, "col": 6, "ref": "G2", "expectedFormula": "=VLOOKUP(A2,$A$10:$B$12,2,0)", "expectedValue": 2000000, "hint": "=VLOOKUP(A2,$A$10:$B$12,2,0)"},
+                {"row": 2, "col": 6, "ref": "G3", "expectedFormula": "=VLOOKUP(A3,$A$10:$B$12,2,0)", "expectedValue": 2000000, "hint": "=VLOOKUP(A3,$A$10:$B$12,2,0)"},
+                {"row": 3, "col": 6, "ref": "G4", "expectedFormula": "=VLOOKUP(A4,$A$10:$B$12,2,0)", "expectedValue": 1500000, "hint": "=VLOOKUP(A4,$A$10:$B$12,2,0)"},
+                {"row": 4, "col": 6, "ref": "G5", "expectedFormula": "=VLOOKUP(A5,$A$10:$B$12,2,0)", "expectedValue": 1300000, "hint": "=VLOOKUP(A5,$A$10:$B$12,2,0)"},
+                {"row": 5, "col": 6, "ref": "G6", "expectedFormula": "=VLOOKUP(A6,$A$10:$B$12,2,0)", "expectedValue": 1500000, "hint": "=VLOOKUP(A6,$A$10:$B$12,2,0)"},
+                {"row": 6, "col": 6, "ref": "G7", "expectedFormula": "=VLOOKUP(A7,$A$10:$B$12,2,0)", "expectedValue": 1300000, "hint": "=VLOOKUP(A7,$A$10:$B$12,2,0)"},
+
+                {"row": 1, "col": 7, "ref": "H2", "expectedFormula": "=IF(E2>25,200000,0)", "expectedValue": 200000, "hint": "=IF(E2>25,200000,0)"},
+                {"row": 2, "col": 7, "ref": "H3", "expectedFormula": "=IF(E3>25,200000,0)", "expectedValue": 0, "hint": "=IF(E3>25,200000,0)"},
+                {"row": 3, "col": 7, "ref": "H4", "expectedFormula": "=IF(E4>25,200000,0)", "expectedValue": 0, "hint": "=IF(E4>25,200000,0)"},
+                {"row": 4, "col": 7, "ref": "H5", "expectedFormula": "=IF(E5>25,200000,0)", "expectedValue": 0, "hint": "=IF(E5>25,200000,0)"},
+                {"row": 5, "col": 7, "ref": "H6", "expectedFormula": "=IF(E6>25,200000,0)", "expectedValue": 0, "hint": "=IF(E6>25,200000,0)"},
+                {"row": 6, "col": 7, "ref": "H7", "expectedFormula": "=IF(E7>25,200000,0)", "expectedValue": 200000, "hint": "=IF(E7>25,200000,0)"},
+
+                {"row": 1, "col": 8, "ref": "I2", "expectedFormula": "=F2+G2+H2", "expectedValue": 11920000, "hint": "=F2+G2+H2"},
+                {"row": 2, "col": 8, "ref": "I3", "expectedFormula": "=F3+G3+H3", "expectedValue": 8075000, "hint": "=F3+G3+H3"},
+                {"row": 3, "col": 8, "ref": "I4", "expectedFormula": "=F4+G4+H4", "expectedValue": 11220000, "hint": "=F4+G4+H4"},
+                {"row": 4, "col": 8, "ref": "I5", "expectedFormula": "=F5+G5+H5", "expectedValue": 11020000, "hint": "=F5+G5+H5"},
+                {"row": 5, "col": 8, "ref": "I6", "expectedFormula": "=F6+G6+H6", "expectedValue": 7575000, "hint": "=F6+G6+H6"},
+                {"row": 6, "col": 8, "ref": "I7", "expectedFormula": "=F7+G7+H7", "expectedValue": 7575000, "hint": "=F7+G7+H7"},
+            ],
+        },
+        # 5. Đề thi mẫu UDCNTTCB
+        {
+            "id": "lab-test-tien-hang",
+            "group": "exam",
+            "badge": "Đề thi mẫu UDCNTTCB",
+            "title": "Bảng Tính Tiền Hàng (De-mau-UDCNTTCB)",
+            "description": "Phần II (Excel - 4 điểm) trong đề thi mẫu UDCNTTCB: VLOOKUP kết hợp LEFT lấy Tên hàng và Đơn giá từ Bảng phụ.",
+            "imageUrl": "/materials/images/test_1.jpg",
+            "theoryPoints": [
+                {
+                    "title": "1. VLOOKUP + LEFT lấy thông tin từ Bảng phụ",
+                    "syntax": "=VLOOKUP(LEFT(A2,1), $A$10:$C$13, 2, 0)",
+                    "explanation": "Lấy ký tự đầu của Mã hàng ('K', 'B', 'S', 'D') dò trong bảng phụ để trả về Tên hàng (cột 2) và Đơn giá (cột 3)."
+                }
+            ],
+            "instructions": [
+                "Cột Tên hàng (B2:B6): Dùng VLOOKUP kết hợp LEFT(A2,1) dò trong Bảng phụ $A$10:$C$13.",
+                "Cột Đơn giá (E2:E6): Dùng VLOOKUP kết hợp LEFT(A2,1) lấy cột 3 từ Bảng phụ $A$10:$C$13.",
+                "Cột Thành tiền (G2:G6): Đơn giá * Số lượng (E2*F2).",
+                "Ô G7 (Tổng tiền): Tính tổng cột Thành tiền bằng hàm SUM.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F", "G"],
+            "rows": [
+                ["Mã hàng", "Tên hàng", "Loại", "Tháng", "Đơn giá", "Số lượng", "Thành tiền"],
+                ["K01", None, 1, 1, None, 30, None],
+                ["B02", None, 1, 2, None, 50, None],
+                ["S02", None, 2, 1, None, 70, None],
+                ["B03", None, 3, 3, None, 60, None],
+                ["D04", None, 2, 2, None, 30, None],
+                ["Tổng tiền", "", "", "", "", "", None],
+                ["", "", "", "", "", "", ""],
+                ["Ký tự đầu", "Tên hàng", "Đơn giá", "", "", "", ""],
+                ["B", "Bánh", 75000, "", "", "", ""],
+                ["D", "Đường", 35000, "", "", "", ""],
+                ["K", "Kẹo", 25000, "", "", "", ""],
+                ["S", "Sữa", 450000, "", "", "", ""],
+            ],
+            "targets": [
+                {"row": 1, "col": 1, "ref": "B2", "expectedFormula": "=VLOOKUP(LEFT(A2,1),$A$10:$C$13,2,0)", "expectedValue": "Kẹo", "hint": "=VLOOKUP(LEFT(A2,1),$A$10:$C$13,2,0)"},
+                {"row": 2, "col": 1, "ref": "B3", "expectedFormula": "=VLOOKUP(LEFT(A3,1),$A$10:$C$13,2,0)", "expectedValue": "Bánh", "hint": "=VLOOKUP(LEFT(A3,1),$A$10:$C$13,2,0)"},
+                {"row": 3, "col": 1, "ref": "B4", "expectedFormula": "=VLOOKUP(LEFT(A4,1),$A$10:$C$13,2,0)", "expectedValue": "Sữa", "hint": "=VLOOKUP(LEFT(A4,1),$A$10:$C$13,2,0)"},
+                {"row": 4, "col": 1, "ref": "B5", "expectedFormula": "=VLOOKUP(LEFT(A5,1),$A$10:$C$13,2,0)", "expectedValue": "Bánh", "hint": "=VLOOKUP(LEFT(A5,1),$A$10:$C$13,2,0)"},
+                {"row": 5, "col": 1, "ref": "B6", "expectedFormula": "=VLOOKUP(LEFT(A6,1),$A$10:$C$13,2,0)", "expectedValue": "Đường", "hint": "=VLOOKUP(LEFT(A6,1),$A$10:$C$13,2,0)"},
+
+                {"row": 1, "col": 4, "ref": "E2", "expectedFormula": "=VLOOKUP(LEFT(A2,1),$A$10:$C$13,3,0)", "expectedValue": 25000, "hint": "=VLOOKUP(LEFT(A2,1),$A$10:$C$13,3,0)"},
+                {"row": 2, "col": 4, "ref": "E3", "expectedFormula": "=VLOOKUP(LEFT(A3,1),$A$10:$C$13,3,0)", "expectedValue": 75000, "hint": "=VLOOKUP(LEFT(A3,1),$A$10:$C$13,3,0)"},
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": "=VLOOKUP(LEFT(A4,1),$A$10:$C$13,3,0)", "expectedValue": 450000, "hint": "=VLOOKUP(LEFT(A4,1),$A$10:$C$13,3,0)"},
+                {"row": 4, "col": 4, "ref": "E5", "expectedFormula": "=VLOOKUP(LEFT(A5,1),$A$10:$C$13,3,0)", "expectedValue": 75000, "hint": "=VLOOKUP(LEFT(A5,1),$A$10:$C$13,3,0)"},
+                {"row": 5, "col": 4, "ref": "E6", "expectedFormula": "=VLOOKUP(LEFT(A6,1),$A$10:$C$13,3,0)", "expectedValue": 35000, "hint": "=VLOOKUP(LEFT(A6,1),$A$10:$C$13,3,0)"},
+
+                {"row": 1, "col": 6, "ref": "G2", "expectedFormula": "=E2*F2", "expectedValue": 750000, "hint": "=E2*F2"},
+                {"row": 2, "col": 6, "ref": "G3", "expectedFormula": "=E3*F3", "expectedValue": 3750000, "hint": "=E3*F3"},
+                {"row": 3, "col": 6, "ref": "G4", "expectedFormula": "=E4*F4", "expectedValue": 31500000, "hint": "=E4*F4"},
+                {"row": 4, "col": 6, "ref": "G5", "expectedFormula": "=E5*F5", "expectedValue": 4500000, "hint": "=E5*F5"},
+                {"row": 5, "col": 6, "ref": "G6", "expectedFormula": "=E6*F6", "expectedValue": 1050000, "hint": "=E6*F6"},
+                {"row": 6, "col": 6, "ref": "G7", "expectedFormula": "=SUM(G2:G6)", "expectedValue": 41550000, "hint": "=SUM(G2:G6)"},
+            ],
+        },
+        # 6. Bài 03: SUM / SUMIF
+        {
+            "id": "lab-bai-03-sum",
+            "group": "lesson",
+            "badge": "Bài 03",
+            "title": "Nhóm hàm tính tổng: SUM, SUMIF, SUMIFS",
+            "description": "Thực hành tính tổng doanh thu, tổng có điều kiện theo loại sản phẩm và tổng nhiều điều kiện.",
+            "theoryPoints": [
+                {
+                    "title": "SUMIF (Tổng 1 điều kiện)",
+                    "syntax": '=SUMIF(B2:B6, "Áo", E2:E6)',
+                    "explanation": "Đối số 1 là vùng điều kiện, đối số 2 là điều kiện, đối số 3 là vùng cần tính tổng."
+                },
+                {
+                    "title": "SUMIFS (Tổng nhiều điều kiện)",
+                    "syntax": '=SUMIFS(E2:E6, B2:B6, "Quần", C2:C6, ">=10")',
+                    "explanation": "Khác với SUMIF, vùng tính tổng (E2:E6) được đưa lên đầu tiên, theo sau là các cặp (vùng ĐK, ĐK)."
+                }
+            ],
+            "instructions": [
+                "Ô E2:E6: Tính Thành tiền = Số lượng * Đơn giá (C2*D2).",
+                "Ô E7: Tính Tổng thành tiền bằng hàm SUM.",
+                "Ô H2: Tính Tổng thành tiền của mặt hàng 'Áo' bằng SUMIF.",
+                "Ô H3: Tính Tổng thành tiền của mặt hàng 'Quần' có Số lượng >= 10 bằng SUMIFS.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H"],
+            "rows": [
+                ["Mã", "Sản phẩm", "Số lượng", "Đơn giá", "Thành tiền", "", "Chỉ tiêu thống kê", "Kết quả"],
+                ["SP1", "Áo", 12, 150000, None, "", "Tổng tiền Áo (SUMIF)", None],
+                ["SP2", "Quần", 8, 250000, None, "", "Tổng tiền Quần SL>=10 (SUMIFS)", None],
+                ["SP3", "Áo", 5, 180000, None, "", "", ""],
+                ["SP4", "Quần", 15, 220000, None, "", "", ""],
+                ["SP5", "Giày", 6, 400000, None, "", "", ""],
+                ["", "Tổng cộng", "", "", None, "", "", ""],
+            ],
+            "targets": [
+                {"row": 1, "col": 4, "ref": "E2", "expectedFormula": "=C2*D2", "expectedValue": 1800000, "hint": "=C2*D2"},
+                {"row": 2, "col": 4, "ref": "E3", "expectedFormula": "=C3*D3", "expectedValue": 2000000, "hint": "=C3*D3"},
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": "=C4*D4", "expectedValue": 900000, "hint": "=C4*D4"},
+                {"row": 4, "col": 4, "ref": "E5", "expectedFormula": "=C5*D5", "expectedValue": 3300000, "hint": "=C5*D5"},
+                {"row": 5, "col": 4, "ref": "E6", "expectedFormula": "=C6*D6", "expectedValue": 2400000, "hint": "=C6*D6"},
+                {"row": 6, "col": 4, "ref": "E7", "expectedFormula": "=SUM(E2:E6)", "expectedValue": 10400000, "hint": "=SUM(E2:E6)"},
+                {"row": 1, "col": 7, "ref": "H2", "expectedFormula": '=SUMIF(B2:B6,"Áo",E2:E6)', "expectedValue": 2700000, "hint": '=SUMIF(B2:B6,"Áo",E2:E6)'},
+                {"row": 2, "col": 7, "ref": "H3", "expectedFormula": '=SUMIFS(E2:E6,B2:B6,"Quần",C2:C6,">=10")', "expectedValue": 3300000, "hint": '=SUMIFS(E2:E6,B2:B6,"Quần",C2:C6,">=10")'},
+            ],
+        },
+        # 7. Bài 04: COUNT / COUNTA / COUNTIF
+        {
+            "id": "lab-bai-04-count",
+            "group": "lesson",
+            "badge": "Bài 04",
+            "title": "Nhóm hàm đếm: COUNT, COUNTA, COUNTBLANK, COUNTIF",
+            "description": "Phân biệt đếm số, đếm ô khác rỗng, đếm ô trống và đếm có điều kiện.",
+            "instructions": [
+                "Ô F2: Đếm số học viên đã có điểm (COUNT trên C2:C7).",
+                "Ô F3: Đếm tổng số học viên có tên (COUNTA trên B2:B7).",
+                "Ô F4: Đếm số ô điểm còn bỏ trống (COUNTBLANK trên C2:C7).",
+                "Ô F5: Đếm số học viên có điểm >= 8 (COUNTIF).",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F"],
+            "rows": [
+                ["STT", "Họ và tên", "Điểm thi", "", "Yêu cầu đếm", "Kết quả"],
+                [1, "Nguyễn Văn An", 8.5, "", "Số HV có điểm (COUNT)", None],
+                [2, "Trần Thị Bình", 6.0, "", "Tổng số HV (COUNTA)", None],
+                [3, "Lê Minh Châu", "", "", "Số HV chưa có điểm (COUNTBLANK)", None],
+                [4, "Phạm Quốc Dũng", 9.0, "", "Số HV điểm >= 8 (COUNTIF)", None],
+                [5, "Hoàng Lan Anh", 7.5, "", "", ""],
+                [6, "Vũ Hải Nam", 8.0, "", "", ""],
+            ],
+            "targets": [
+                {"row": 1, "col": 5, "ref": "F2", "expectedFormula": "=COUNT(C2:C7)", "expectedValue": 5, "hint": "=COUNT(C2:C7)"},
+                {"row": 2, "col": 5, "ref": "F3", "expectedFormula": "=COUNTA(B2:B7)", "expectedValue": 6, "hint": "=COUNTA(B2:B7)"},
+                {"row": 3, "col": 5, "ref": "F4", "expectedFormula": "=COUNTBLANK(C2:C7)", "expectedValue": 1, "hint": "=COUNTBLANK(C2:C7)"},
+                {"row": 4, "col": 5, "ref": "F5", "expectedFormula": '=COUNTIF(C2:C7,">=8")', "expectedValue": 3, "hint": '=COUNTIF(C2:C7,">=8")'},
+            ],
+        },
+        # 8. Bài 05: IF, AND, OR
+        {
+            "id": "lab-bai-05-if",
+            "group": "lesson",
+            "badge": "Bài 05",
+            "title": "Hàm điều kiện & Logic: IF, AND, OR",
+            "description": "Xếp loại kết quả thi và xét học bổng kết hợp nhiều điều kiện logic.",
+            "instructions": [
+                "Cột Kết quả (E2:E5): Nếu Điểm TB >= 5 thì 'Đạt', ngược lại 'Trượt'.",
+                "Cột Học bổng (F2:F5): Nếu Điểm TB >= 8 VÀ Hạnh kiểm = 'Tốt' thì 1000000, ngược lại 0.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E", "F"],
+            "rows": [
+                ["STT", "Họ tên", "Điểm TB", "Hạnh kiểm", "Kết quả", "Học bổng"],
+                [1, "An", 8.5, "Tốt", None, None],
+                [2, "Bình", 4.5, "Khá", None, None],
+                [3, "Châu", 8.2, "Khá", None, None],
+                [4, "Dũng", 6.5, "Tốt", None, None],
+            ],
+            "targets": [
+                {"row": 1, "col": 4, "ref": "E2", "expectedFormula": '=IF(C2>=5,"Đạt","Trượt")', "expectedValue": "Đạt", "hint": '=IF(C2>=5,"Đạt","Trượt")'},
+                {"row": 2, "col": 4, "ref": "E3", "expectedFormula": '=IF(C3>=5,"Đạt","Trượt")', "expectedValue": "Trượt", "hint": '=IF(C3>=5,"Đạt","Trượt")'},
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": '=IF(C4>=5,"Đạt","Trượt")', "expectedValue": "Đạt", "hint": '=IF(C4>=5,"Đạt","Trượt")'},
+                {"row": 4, "col": 4, "ref": "E5", "expectedFormula": '=IF(C5>=5,"Đạt","Trượt")', "expectedValue": "Đạt", "hint": '=IF(C5>=5,"Đạt","Trượt")'},
+                {"row": 1, "col": 5, "ref": "F2", "expectedFormula": '=IF(AND(C2>=8,D2="Tốt"),1000000,0)', "expectedValue": 1000000, "hint": '=IF(AND(C2>=8,D2="Tốt"),1000000,0)'},
+                {"row": 2, "col": 5, "ref": "F3", "expectedFormula": '=IF(AND(C3>=8,D3="Tốt"),1000000,0)', "expectedValue": 0, "hint": '=IF(AND(C3>=8,D3="Tốt"),1000000,0)'},
+                {"row": 3, "col": 5, "ref": "F4", "expectedFormula": '=IF(AND(C4>=8,D4="Tốt"),1000000,0)', "expectedValue": 0, "hint": '=IF(AND(C4>=8,D4="Tốt"),1000000,0)'},
+                {"row": 4, "col": 5, "ref": "F5", "expectedFormula": '=IF(AND(C5>=8,D5="Tốt"),1000000,0)', "expectedValue": 0, "hint": '=IF(AND(C5>=8,D5="Tốt"),1000000,0)'},
+            ],
+        },
+        # 9. Bài 06: Hàm xử lý chuỗi
+        {
+            "id": "lab-bai-06-text",
+            "group": "lesson",
+            "badge": "Bài 06",
+            "title": "Hàm xử lý chuỗi: LEFT, MID, RIGHT, VALUE",
+            "description": "Tách mã loại, mã giữa và chuyển ký tự số ở cuối chuỗi sang dạng số.",
+            "instructions": [
+                "Cột Mã loại (B2:B4): Lấy 2 ký tự đầu của Mã hàng (LEFT).",
+                "Cột Phân nhóm (C2:C4): Lấy 1 ký tự ở vị trí thứ 4 (MID).",
+                "Cột Số lượng (D2:D4): Lấy 2 ký tự cuối chuyển sang dạng số (VALUE + RIGHT).",
+            ],
+            "colHeaders": ["A", "B", "C", "D"],
+            "rows": [
+                ["Mã hàng", "Mã loại (2 đầu)", "Phân nhóm (vị trí 4)", "Số lượng (2 cuối dạng số)"],
+                ["TV-A-15", None, None, None],
+                ["TL-B-08", None, None, None],
+                ["MG-A-20", None, None, None],
+            ],
+            "targets": [
+                {"row": 1, "col": 1, "ref": "B2", "expectedFormula": "=LEFT(A2,2)", "expectedValue": "TV", "hint": "=LEFT(A2,2)"},
+                {"row": 2, "col": 1, "ref": "B3", "expectedFormula": "=LEFT(A3,2)", "expectedValue": "TL", "hint": "=LEFT(A3,2)"},
+                {"row": 3, "col": 1, "ref": "B4", "expectedFormula": "=LEFT(A4,2)", "expectedValue": "MG", "hint": "=LEFT(A4,2)"},
+                {"row": 1, "col": 2, "ref": "C2", "expectedFormula": "=MID(A2,4,1)", "expectedValue": "A", "hint": "=MID(A2,4,1)"},
+                {"row": 2, "col": 2, "ref": "C3", "expectedFormula": "=MID(A3,4,1)", "expectedValue": "B", "hint": "=MID(A3,4,1)"},
+                {"row": 3, "col": 2, "ref": "C4", "expectedFormula": "=MID(A4,4,1)", "expectedValue": "A", "hint": "=MID(A4,4,1)"},
+                {"row": 1, "col": 3, "ref": "D2", "expectedFormula": "=VALUE(RIGHT(A2,2))", "expectedValue": 15, "hint": "=VALUE(RIGHT(A2,2))"},
+                {"row": 2, "col": 3, "ref": "D3", "expectedFormula": "=VALUE(RIGHT(A3,2))", "expectedValue": 8, "hint": "=VALUE(RIGHT(A3,2))"},
+                {"row": 3, "col": 3, "ref": "D4", "expectedFormula": "=VALUE(RIGHT(A4,2))", "expectedValue": 20, "hint": "=VALUE(RIGHT(A4,2))"},
+            ],
+        },
+        # 10. Bài 07: VLOOKUP & HLOOKUP
+        {
+            "id": "lab-bai-07-lookup",
+            "group": "lesson",
+            "badge": "Bài 07",
+            "title": "Hàm tìm kiếm: VLOOKUP & HLOOKUP",
+            "description": "Dò tìm chính xác từ Bảng phụ (nhớ dùng địa chỉ tuyệt đối $A$8:$C$10).",
+            "instructions": [
+                "Cột Tên hàng (C2:C4): Dùng VLOOKUP dựa vào Mã (A2:A4) và Bảng phụ A8:C10.",
+                "Cột Đơn giá (D2:D4): Dùng VLOOKUP lấy cột thứ 3 từ Bảng phụ A8:C10.",
+                "Cột Thành tiền (E2:E4): Số lượng * Đơn giá.",
+            ],
+            "colHeaders": ["A", "B", "C", "D", "E"],
+            "rows": [
+                ["Mã", "Số lượng", "Tên hàng", "Đơn giá", "Thành tiền"],
+                ["B", 10, None, None, None],
+                ["K", 5, None, None, None],
+                ["S", 4, None, None, None],
+                ["", "", "", "", ""],
+                ["BẢNG PHỤ", "", "", "", ""],
+                ["Mã", "Tên hàng", "Đơn giá", "", ""],
+                ["B", "Bánh", 75000, "", ""],
+                ["K", "Kẹo", 25000, "", ""],
+                ["S", "Sữa", 450000, "", ""],
+            ],
+            "targets": [
+                {"row": 1, "col": 2, "ref": "C2", "expectedFormula": "=VLOOKUP(A2,$A$8:$C$10,2,0)", "expectedValue": "Bánh", "hint": "=VLOOKUP(A2,$A$8:$C$10,2,0)"},
+                {"row": 2, "col": 2, "ref": "C3", "expectedFormula": "=VLOOKUP(A3,$A$8:$C$10,2,0)", "expectedValue": "Kẹo", "hint": "=VLOOKUP(A3,$A$8:$C$10,2,0)"},
+                {"row": 3, "col": 2, "ref": "C4", "expectedFormula": "=VLOOKUP(A4,$A$8:$C$10,2,0)", "expectedValue": "Sữa", "hint": "=VLOOKUP(A4,$A$8:$C$10,2,0)"},
+                {"row": 1, "col": 3, "ref": "D2", "expectedFormula": "=VLOOKUP(A2,$A$8:$C$10,3,0)", "expectedValue": 75000, "hint": "=VLOOKUP(A2,$A$8:$C$10,3,0)"},
+                {"row": 2, "col": 3, "ref": "D3", "expectedFormula": "=VLOOKUP(A3,$A$8:$C$10,3,0)", "expectedValue": 25000, "hint": "=VLOOKUP(A3,$A$8:$C$10,3,0)"},
+                {"row": 3, "col": 3, "ref": "D4", "expectedFormula": "=VLOOKUP(A4,$A$8:$C$10,3,0)", "expectedValue": 450000, "hint": "=VLOOKUP(A4,$A$8:$C$10,3,0)"},
+                {"row": 1, "col": 4, "ref": "E2", "expectedFormula": "=B2*D2", "expectedValue": 750000, "hint": "=B2*D2"},
+                {"row": 2, "col": 4, "ref": "E3", "expectedFormula": "=B3*D3", "expectedValue": 125000, "hint": "=B3*D3"},
+                {"row": 3, "col": 4, "ref": "E4", "expectedFormula": "=B4*D4", "expectedValue": 1800000, "hint": "=B4*D4"},
+            ],
+        },
+    ]
+    return labs
+
+
+if __name__ == "__main__":
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    labs = build_interactive_labs()
+    out = DATA_DIR / "excel_interactive_labs.json"
+    out.write_text(json.dumps(labs, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[INTERACTIVE] Đã tạo {len(labs)} bài thực hành Excel tương tác.")

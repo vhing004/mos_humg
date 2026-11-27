@@ -1,0 +1,1329 @@
+{
+  "id": "module03",
+  "code": "Module 03",
+  "title": "Xử lý văn bản cơ bản (MS Word)",
+  "category": "word",
+  "description": "Soạn thảo, định dạng văn bản, bảng biểu, hình ảnh, trộn thư và in ấn trong Word.",
+  "questions": [
+    {
+      "number": 1,
+      "question": "Hãy nêu cách khởi động Microsoft Office Word?",
+      "options": [
+        "Kích đúp chuột vào biểu tượng shortcut Microsoft Office Word",
+        "Start\\ Program\\ Word.",
+        "Start\\ Run\\ gõ Word.exe\\ Ok",
+        "Kích đúp chuột vào biểu tượng shortcut Microsoft Office Powerpoint"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 2,
+      "question": "Hãy cho biết chức năng của tổ hợp phím Ctrl + E?",
+      "options": [
+        "Căn thẳng ở giữa văn bản",
+        "Căn thẳng lề trái văn bản",
+        "Căn thẳng lề phải văn bản",
+        "Căn thẳng lề trên văn bản"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 3,
+      "question": "Tập tin MS Word 2010 được lưu lại có phần mở rộng định dạng mặc định là:",
+      "options": [
+        ".docx",
+        ".doc",
+        ".xlsx",
+        ".pdf"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 4,
+      "question": "Tổ hợp phím Ctrl+K có tác dụng gì?",
+      "options": [
+        "Mở hộp thoại tạo các liên kết (Hyperlink)",
+        "Mở hộp thoại Font",
+        "Mở hộp thoại Paragraph",
+        "Mở hộp thoại tìm kiếm"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 5,
+      "question": "Trong các phần mềm sau đâu là phần mềm có thể dùng để soạn thảo văn bản?",
+      "options": [
+        "Cả (1)+(2)+(3)",
+        "Microsoft Word (1)",
+        "LibreOffice Writer(2)",
+        "OpenOffice Write(3)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 6,
+      "question": "Chương trình soạn thảo văn bản có chức năng chính là gì?",
+      "options": [
+        "Cả (1)+(2)+(3)",
+        "Hiển thị nội dung văn bản trên màn hình (1)",
+        "Cho phép người dùng sửa đổi, bổ sung tại vị trí bất kì trong văn bản (2)",
+        "Cho phép lưu trữ, ín ấn văn bản (3)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 7,
+      "question": "Để đóng văn bản đang làm việc chúng ta thực hiện:",
+      "options": [
+        "File/Close",
+        "File/Open",
+        "File/Save",
+        "File/Print"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 8,
+      "question": "Lệnh nào cho phép lưu tài liệu vào trong máy tính:",
+      "options": [
+        "File/Save",
+        "File/Save As",
+        "File/Close",
+        "File/Save as wizard"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 9,
+      "question": "Tổ hợp phím Ctrl + N có chức năng gì?",
+      "options": [
+        "Tạo tài liệu mới",
+        "Lưu tài liệu",
+        "Mở tài liệu",
+        "Đóng tài liệu"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 10,
+      "question": "Tên văn bản đang làm việc được hiển thị trên thanh:",
+      "options": [
+        "Thanh tiêu đề",
+        "Thanh trạng thái",
+        "Thanh truy cập nhanh",
+        "Thanh thước kẻ"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 11,
+      "question": "Thanh truy cập nhanh chứa các chức năng mặc định nào?",
+      "options": [
+        "Save, undo, redo",
+        "Save, Undo, Copy",
+        "Save,Copy, redo",
+        "Save, undo, Print"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 12,
+      "question": "Chế độ hiển thị Print Layout là chế độ:",
+      "options": [
+        "Hiển thị văn bản như khi được in ra giấy",
+        "Hiển thị văn bản theo kiểu phóng to kích thước font chữ",
+        "Hiển thị văn bản trong chế độ web",
+        "Hiển thị văn bản được phóng to"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 13,
+      "question": "Chế độ hiển thị nào chỉ cho phép hiển thị văn bản để đọc, không được sửa?",
+      "options": [
+        "Full Screen Reading",
+        "Print Layout",
+        "Web Layout",
+        "Page Layout"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 14,
+      "question": "Lệnh Help của Microsoft Word có chức năng:",
+      "options": [
+        "Trợ giúp tìm kiếm thông tin trên Word",
+        "Tìm kiếm thông tin trên Internet",
+        "Thay thế thông tin cần tìm kiếm",
+        "Mở ra trang tìm kiếm để nhìn thấy thông tin từng chức năng"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 15,
+      "question": "Muốn mở chức năng Help của Microsoft Word, ấn phím:",
+      "options": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 16,
+      "question": "Muốn tìm kiếm với chức năng Help của Microsoft Word cần có:",
+      "options": [
+        "Máy tính có phần mềm Word 2010",
+        "Máy tính có Word và được kết nối mạng",
+        "Máy tính có đủ Unikey và Vietkey",
+        "Máy tính có Word và Unikey"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 17,
+      "question": "Chế độ hiển thị nào chỉ cho phép hiển thị văn bản theo kiểu Website?",
+      "options": [
+        "Web Layout",
+        "Full Screen Reading",
+        "Print Layout",
+        "Page Layout"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 18,
+      "question": "Thanh Zoom hiển thị 100% có nghĩa là:",
+      "options": [
+        "Văn bản được hiển thị như khi được in ra giấy",
+        "Văn bản đang được hiển thị ở chế độ Full Screen Reading",
+        "Văn bản được phóng to gấp đôi so với ban đầu",
+        "Văn bản đang được hiển thị ở chế độ Website."
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 19,
+      "question": "Để sắp xếp các cửa sổ văn bản trên màn hình Word theo thứ tự ta sử dụng Tab nào?",
+      "options": [
+        "View",
+        "Home",
+        "File",
+        "Page Layout"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 20,
+      "question": "Chế độ nào cho phép hiển thị màn hình với kích thước hiển thị lớn nhất?",
+      "options": [
+        "Full Screen Reading",
+        "Draft",
+        "Outline",
+        "Web Layout"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 21,
+      "question": "Để chuyển đổi giữa các file văn bản đang mở trong Word ta thực hiện:",
+      "options": [
+        "View/Switch Windows",
+        "View/Show",
+        "View/Split",
+        "View/Arrange All"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 22,
+      "question": "Để phóng to màn hình soạn thảo văn bản ta thực hiện như thế nào?",
+      "options": [
+        "Click chuột vào nút Maximize tại góc trên cùng bên phải màn hình",
+        "Click chuột vào nút Maximize tại góc trên cùng bên trái màn hình",
+        "Click chuột vào nút Maximize tại góc trên cùng bên dưới màn hình",
+        "Click chuột vào nút Maximize tại góc trên cùng bên trên màn hình"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 23,
+      "question": "Mục Save AutoRecover information every để xác lập:",
+      "options": [
+        "Thời gian để lưu file tự động",
+        "Thời gian để mở file tự động",
+        "Thời gian để đóng file tự động",
+        "Thời gian để lưu file dưới định dạng một tên khác"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 24,
+      "question": "Để thay đổi thư mục lưu văn bản mặc định ta thực hiện:",
+      "options": [
+        "File/Options/Save/Default file location",
+        "File/Options/Save/Auto Recover file location",
+        "File/Save/Default file location",
+        "File/Save/Defaunt file location"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 25,
+      "question": "Muốn hiển thị đường biên văn bản ta thực hiện",
+      "options": [
+        "File/Options/Advanced/đánh dấu lựa chọn Show Text Boundaries",
+        "Home/Options/Advanced/đánh dấu lựa chọn Show Text Boundaries",
+        "Insert/Options/Advanced/đánh dấu lựa chọn Show Text Boundaries",
+        "View/Options/Advanced/đánh dấu lựa chọn Show Text Boundaries"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 26,
+      "question": "Trong soạn thảo Microsoft Office Word, công dụng của tổ hợp phím Ctrl + O là",
+      "options": [
+        "Mở một file đã có",
+        "Mở một file mới",
+        "Đóng file đang mở",
+        "Lưu file"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 27,
+      "question": "Để mở một văn bản có sẵn ta dùng tổ hợp phím nào?",
+      "options": [
+        "Ctrl+O",
+        "Ctrl+Shift+O",
+        "Shift+O",
+        "Alt+O"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 28,
+      "question": "Để chèn một đoạn dữ liệu trong Excel sang file Word ta thực hiện như sau:",
+      "options": [
+        "Copy phần dữ liệu định chèn. Vào Home/ Paste/ Paste Special/ Microsoft Excel 2003 Worksheet Object /OK",
+        "Vào Home/ Paste/Paste Special/ Microsoft Excel 2003 Worksheet Object /OK",
+        "Copy phần dữ liệu định chèn. Vào Home/ Paste/Microsoft Excel 2003 Worksheet Object /OK",
+        "Copy phần dữ liệu định chèn. Vào Home/ Paste Special/ Microsoft Excel 2003 Worksheet Object"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 29,
+      "question": "© được gọi là:",
+      "options": [
+        "Ký hiệu đặc biệt",
+        "Chữ viết",
+        "Kí tự thông thường",
+        "Hình ảnh"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 30,
+      "question": "Để chèn được dấu ≥ vào văn bản, ta thực hiện:",
+      "options": [
+        "Insert/ Symbol",
+        "Dấu ≥ được tích hợp sẵn trên bàn phím, chỉ cần gõ",
+        "Vào thanh Quick Access Toolbar/ Spelling and Grammar",
+        "Gõ dấu > và gõ dấu ="
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 31,
+      "question": "Để chèn được ký hiệu ® ta thực hiện các bước:",
+      "options": [
+        "Insert/ Symbol/ More Symbols/ Special Character",
+        "Insert/ Symbol/ More Symbols/ Wingdings",
+        "Insert/ Symbol/ More Symbols/ Webdings",
+        "Insert/ Symbol/ More Symbols/ Symbol/ Special Character"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 32,
+      "question": "Tổ hợp phím Ctrl + S có chức năng:",
+      "options": [
+        "Lưu tài liệu",
+        "Mở tài liệu",
+        "Đóng tài liệu",
+        "Tạo tài liệu mới"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 33,
+      "question": "Để lưu văn bản hiện thời thành một tên mới ta thực hiện:",
+      "options": [
+        "File/Save As",
+        "File/Save",
+        "Home/Save As",
+        "Home/Save"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 34,
+      "question": "Khi lưu văn bản, ta có thể lưu với các phần mở rộng là?",
+      "options": [
+        ".doc, .docx,.pdf",
+        ".doc,.xlsx,.pdf",
+        ".docx,.xlsx,.pdf",
+        ".docx,.xls,.pdf"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 35,
+      "question": "Để sắp xếp tất cả các cửa sổ văn bản đang mở trên màn hình máy tính chúng ta thực hiện:",
+      "options": [
+        "View/ Window/ Arrange All",
+        "Home/ Window/ Arrange All",
+        "File/ Window/ Arrange All",
+        "Review/ Window/ Arrange All"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 36,
+      "question": "Để sắp xếp các cửa sổ văn bản trên màn hình Word theo thứ tự nào đó ta thực hiện như thế nào?",
+      "options": [
+        "Vào View/ Trong nhóm Window chọn kiểu sắp xếp thích hợp",
+        "Vào Home/ Trong nhóm Window chọn kiểu sắp xếp thích hợp",
+        "Vào Review/ Trong nhóm Window chọn kiểu sắp xếp thích hợp",
+        "Vào Insert/ Trong nhóm Window chọn kiểu sắp xếp thích hợp"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 37,
+      "question": "Để xóa một văn bản ta thực hiện?",
+      "options": [
+        "Chọn văn bản cần xóa/ Click phải chuột/ Chọn Delete",
+        "Chọn văn bản cần xóa/ Click chuột/ Chọn Delete",
+        "Click phải chuột/ Chọn Delete",
+        "Chọn văn bản cần xóa/ Click phải chuột/ Chọn Remove"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 38,
+      "question": "Để chọn (bôi đen) toàn bộ văn bản ta thực hiện:",
+      "options": [
+        "Click chuột trái 3 lần liên tiếp tại lề trái văn bản",
+        "Click chuột trái 3 lần liên tiếp tại lề phải văn bản",
+        "Click chuột phải 3 lần liên tiếp tại lề trên văn bản",
+        "Click chuột trái 3 lần liên tiếp tại lề dưới văn bản"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 39,
+      "question": "Để di chuyển đến một trang bất kì trong văn bản ta làm thế nào?",
+      "options": [
+        "Bấm tổ hợp phím Ctrl+G, trong mục Enter Page Number nhập số trang cần đến.",
+        "Bấm tổ hợp phím Ctrl+F, trong mục Enter Page Number nhập số trang cần đến.",
+        "Bấm tổ hợp phím Ctrl+H, trong mục Enter Page Number nhập số trang cần đến.",
+        "Bấm tổ hợp phím Ctrl+D, trong mục Enter Page Number nhập số trang cần đến."
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 40,
+      "question": "Muốn tạo được dấu % từ bàn phím ta làm thế nào",
+      "options": [
+        "Giữ phím Shift và ấn số 5",
+        "Giữ phím Ctrl và ấn số 5",
+        "Ấn số 5",
+        "Giữ phím Alt và ấn số 5"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 41,
+      "question": "Để xóa một khối văn bản, ta làm thế nào:",
+      "options": [
+        "Chọn khối, ấn Delete",
+        "Chọn khối, ấn Tab",
+        "Chọn khối, ấn Ctrl + Delete",
+        "Chọn khối, ấn Ctrl + Shift + Delete"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 42,
+      "question": "Trong soạn thảo Word, muốn chèn các kí tự đặc biệt vào văn bản, ta thực hiện:",
+      "options": [
+        "Insert/ Symbol",
+        "View/ Symbol",
+        "Format/ Symbol",
+        "Tools/ Symbol"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 43,
+      "question": "Trong soạn thảo Microsoft word, công dụng của tổ hợp phím Ctrl+H là",
+      "options": [
+        "Mở hộp thoại tìm kiếm và thay thế văn bản.",
+        "Mở hộp thoại Font",
+        "Mở hộp thoại Paragraph",
+        "Mở hộp thoại Tab"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 44,
+      "question": "Trong soạn thảo Microsoft word, công dụng của tổ hợp Ctrl + F là",
+      "options": [
+        "Mở chức năng tìm kiếm văn bản",
+        "Mở chức năng trợ giúp",
+        "Mở chức năng thay thế",
+        "Mở chức năng tạo AutoCorrect"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 45,
+      "question": "Trong hộp thoại Find and Replace/Find, phần Find what dùng để:",
+      "options": [
+        "Điền từ cần tìm kiếm",
+        "Điền từ cần thay thế",
+        "Tùy chọn nâng cao tìm kiếm",
+        "Đảm bảo tìm kiếm chính xác"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 46,
+      "question": "Trong khi làm việc với Word, tổ hợp phím tắt nào cho phép chọn tất cả văn bản đang soạn thảo?",
+      "options": [
+        "Ctrl + A",
+        "Alt + A",
+        "Alt + F",
+        "Ctrl + F"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 47,
+      "question": "Để cắt một đoạn văn bản từ file văn bản này sang file văn bản khác ta thực hiện:",
+      "options": [
+        "Chọn đoạn văn bản cần di chuyển, ấn phím Ctrl+X, sau đó mở file văn bản đích, ấn Ctrl+V",
+        "Chọn đoạn văn bản cần di chuyển, ấn phím Ctrl+C, sau đó mở file văn bản đích, ấn Ctrl+V",
+        "Chọn đoạn văn bản cần di chuyển, sau đó mở file văn bản đích, ấn Ctrl+V",
+        "Chọn đoạn văn bản cần Copy, sau đó mở file văn bản đích, ấn Ctrl+V"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 48,
+      "question": "Tổ hợp phím Ctrl + Z dùng để:",
+      "options": [
+        "Quay lại thao tác trước thao tác hiện hành.",
+        "Hủy thao tác",
+        "Đóng cửa sổ đang mở",
+        "Đóng tập tin đang mở"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 49,
+      "question": "Để khôi phục lại trạng thái trước đó của văn bản ta làm thế nào?",
+      "options": [
+        "Chọn chức năng Undo",
+        "Chọn chức năng Redo",
+        "Chọn chức năng Quick Print",
+        "Chọn chức năng Open"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 50,
+      "question": "Để loại bỏ các hiệu ứng điều chỉnh tự động (AutoCorrect) có sẵn trong phần mềm soạn thảo văn bản tiếng Việt ta thức hiện như sau:",
+      "options": [
+        "Vào File/ Option/ Proofing/ AutoCorrect Option/ Tìm mục cần xóa sau đó ấn Delete/OK",
+        "Vào File/ Option/ AutoCorrect Option/ Tìm mục cần xóa sau đó ấn Delete/OK",
+        "Vào Home /Proofing/ AutoCorrect Option/ Tìm mục cần xóa sau đó ấn Delete/OK",
+        "Vào File/ Proofing/ AutoCorrect Option/ Tìm mục cần xóa sau đó ấn Delete"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 51,
+      "question": "Để loại bỏ các đường gạch chân màu đỏ hoặc màu xanh xuất hiện trong văn bản tiếng Việt ta làm như sau:",
+      "options": [
+        "Vào File/ Option/Proofing/ Trong mục When correcting spelling and Gramma in Word bỏ tích chọn tất cả các lựa chọn",
+        "Vào File/ Option/ Trong mục When correcting spelling and Gramma in Word bỏ tích chọn tất cả các lựa chọn",
+        "Vào File/ Proofing/Trong mục When correcting spelling and Gramma in Word bỏ tích chọn tất cả các lựa chọn",
+        "Vào Home/ Option/Proofing/ Trong mục When correcting spelling and Gramma in Word bỏ tích chọn tất cả các lựa chọn"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 52,
+      "question": "Trong Micrsoft Word để tăng cỡ chữ ta sử dụng tổ hợp phím",
+      "options": [
+        "Ctrl + ]",
+        "Ctrl + B",
+        "Ctrl + Shitf + ]",
+        "Ctrl + ["
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 53,
+      "question": "Tổ hợp phím Ctrl+B có tác dụng gì?",
+      "options": [
+        "Chuyển một chữ thường thành chữ đậm",
+        "Chuyển một chữ thường thành chữ nghiêng",
+        "Chuyển một chữ thành chữ đậm",
+        "Chuyển một chữ thường thành chữ hoa"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 54,
+      "question": "Để tạo chỉ số dưới ta thực hiện",
+      "options": [
+        "Cách (1), (2), (3) đều đúng",
+        "Chọn biểu tượng chỉ số dưới (subscript) trên thanh Ribbon (1)",
+        "Dùng tổ hợp phím Ctrl + = (2)",
+        "Dùng tổ hợp phím Ctrl +D, chọn subscript (3)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 55,
+      "question": "Con trỏ đang ở chỉ số trên, làm thế nào để quay lại dòng bình thường",
+      "options": [
+        "Cách (1), (2), (3) đều đúng",
+        "Chọn biểu tượng chỉ số trên (superscript) trên thanh Ribbon (1)",
+        "Dùng tổ hợp phím Ctrl + Shift + = (2)",
+        "Dùng tổ hợp phím Ctrl +D, chọn subscript (3)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 56,
+      "question": "Để đổ màu nền cho văn bản ta thực hiện như sau:",
+      "options": [
+        "Vào Tab Home/Trong nhóm Paragraph/ Chọn biểu tượng Shading",
+        "Vào Tab Home/Trong nhóm Font/ Chọn biểu tượngText Hightlight Color",
+        "Vào Tab Insert/Trong nhóm Font/ Chọn biểu tượngText Hightlight Color",
+        "Vào Tab Insert/Trong nhóm Paragraph/ Chọn biểu tượng Shading"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 57,
+      "question": "Khi phím CapsLock trên bàn phím sáng, sẽ cho kết quả:",
+      "options": [
+        "Tất cả các kí tự khi soạn thảo đều viết hoa",
+        "Tất cả các câu đều có in hoa đầu câu",
+        "Tất cả các câu đều có in hoa đầu câu và tự tạo dấu chấm kết thúc câu",
+        "Tất cả các chữ đầu dòng In đậm"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 58,
+      "question": "Làm thế nào để tắt chế độ Caps Lock?",
+      "options": [
+        "Nhấn phím Caps Lock 1 lần trên bàn phím",
+        "Giữ phím Caps Lock từ 3 đến 5 giây",
+        "Chế độ Caps Lock tự tắt từ 3 đến 5 giây",
+        "Ấn phím ESC trên bàn phím"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 59,
+      "question": "Bật Caps Lock trên bàn phím và gõ chữ cái trên bàn phím, sẽ cho kết quả:",
+      "options": [
+        "Chữ in hoa",
+        "Chữ in thường",
+        "Chữ có gạch đầu dòng đầu câu và in hoa đầu câu",
+        "Chữ có khoảng cách đầu dòng là 1.27 cm"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 60,
+      "question": "Chức năng Upper Case có tác dụng?",
+      "options": [
+        "Viết hoa toàn bộ đoạn văn được chọn",
+        "Viết thường ký tự đầu tiên và viết hoa các ký tự còn lại",
+        "Viết thường ký tự đầu tiên",
+        "Viết hoa ký tự đầu tiên và viết thường các ký tự còn lại"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 61,
+      "question": "Chức năng Lower Case có tác dụng?",
+      "options": [
+        "Viết thường toàn bộ đoạn văn được chọn",
+        "Viết thường ký tự đầu tiên và viết hoa các ký tự còn lại",
+        "Viết thường ký tự đầu tiên",
+        "Viết hoa ký tự đầu tiên và viết thường các ký tự còn lại"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 62,
+      "question": "Chức năng nào sau đây dùng để thay đổi kiểu chữ?",
+      "options": [
+        "Tab Home/ nhóm Font/ Change Case",
+        "Tab Home/ nhóm Font/ Decrease Font Size",
+        "Tab Home/ nhóm Font/ Increase Font Size",
+        "Tab Home/ nhóm Font/ Subscript"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 63,
+      "question": "Để tách từ trong văn bản Word, ta thực hiện:",
+      "options": [
+        "Vào Page Setup/Hyphenation",
+        "Vào Page Setup/Orientation",
+        "Vào References/Hyphenation",
+        "Vào References/Orentation"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 64,
+      "question": "Để chọn (bôi đen) một đoạn văn bản ta thực hiện:",
+      "options": [
+        "Click chuột trái 3 lần liên tiếp lên đoạn cần chọn",
+        "Click chuột phải 3 lần liên tiếp lên đoạn cần chọn",
+        "Click đúp chuột 3 lần liên tiếp lên đoạn cần chọn",
+        "Không có đáp án nào đúng"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 65,
+      "question": "Để thêm một dấu ngắt đoạn trong Word ta dùng phím nào?",
+      "options": [
+        "Enter",
+        "Ctrl+Enter",
+        "Shift+Enter",
+        "Alt+Enter"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 66,
+      "question": "Đâu là thao tác đúng khi thực hiện thụt đoạn văn bản về bên trái với thông số xác định?",
+      "options": [
+        "Mở hộp thoại Paragraph/Indentation/Left",
+        "Mở hộp thoại Paragraph/Indentation/Right",
+        "Mở hộp thoại Paragraph/Spacing/Right",
+        "Mở hộp thoại Paragraph/Spacing/Left"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 67,
+      "question": "Đâu là thao tác đúng khi thực hiện thụt đoạn văn bản về bên phải với thông số xác định?",
+      "options": [
+        "Mở hộp thoại Paragraph/Indentation/Right",
+        "Mở hộp thoại Paragraph/Indentation/Left",
+        "Mở hộp thoại Paragraph/Spacing/Right",
+        "Mở hộp thoại Paragraph/Spacing/Left"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 68,
+      "question": "Word hỗ trợ các loại thụt đầu dòng nào",
+      "options": [
+        "Tất cả các kiểu (1), (2) và (3) đều đúng",
+        "First line (1)",
+        "Left (2)",
+        "Hanging (3)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 69,
+      "question": "Trong Micrsoft Word để bật/tắt thanh thước kẻ trên cửa sổ soạn thảo, ta thực hiện:",
+      "options": [
+        "View/ Show / đánh dấu/bỏ đánh dấu vào mục Ruler",
+        "File/ Word Option/ Ruler",
+        "View/ Outline",
+        "Insert / đánh dấu vào mục Ruler"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 70,
+      "question": "Khi đặt Tab, khung Tab stop position có chức năng?",
+      "options": [
+        "Chọn vị trí điểm dừng Tab",
+        "Chọn loại Tab",
+        "Chọn đường nối giữa các Tab",
+        "Thiết lập khoảng cách mặc định cho Tab trên bàn phím"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 71,
+      "question": "Muốn xóa Tab đã đặt ta làm thế nào?",
+      "options": [
+        "Kích chuột vào Tab trên thanh Ruler, kéo Tab ra khỏi thanh Ruler",
+        "Kích chuột vào Tab, ấn phím Delete",
+        "Kích chuột vào Tab và nhấn phím Tab từ bàn phím",
+        "Ấn phím Tab từ bàn phím và ấn phím Insert"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 72,
+      "question": "Để tạo khoảng cách đoạn ta làm thế nào?",
+      "options": [
+        "Tab Home/ nhóm Paragraph/ cửa sổ Paragraph/ chọn Spacing/ chỉnh sửa thông số của Before và After",
+        "Tab Home/ nhóm Clipboard/ cửa sổ Paragraph/ Spacing/ chỉnh sửa thông số của Before và After",
+        "Tab Home/ nhóm Clipboard/ cửa sổ Paragraph/ Spacing/ Line Spacing",
+        "Tab Home/ nhóm Clipboard/ cửa sổ Paragraph/ Spacing/ Indentation"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 73,
+      "question": "Trong Microsoft Word để thay đổi khoảng cách giữa các ký tự, ta thực hiện:",
+      "options": [
+        "Ctrl+D/Advance/Trong mục Spacing chọn Expanded hoặc Condensed",
+        "Ctrl+D/Advance/Trong mục Scale chọn Expanded hoặc Condensed",
+        "Ctrl+D/Advance/Trong mục Number form chọn Expanded hoặc Condensed",
+        "Ctrl+D/Advance/Trong mục By chọn Expanded hoặc Condensed"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 74,
+      "question": "Làm thế nào để thiết lập được khoảng cách dòng văn bản",
+      "options": [
+        "Tab Home/ nhóm Paragraph/ cửa sổ Paragraph/ Spacing/ Line Spacing",
+        "Tab Home/ nhómFont/ cửa sổ Paragraph/ Spacing/ Line Spacing",
+        "Tab Home/ nhóm Clipboard/ cửa sổ Paragraph/ Spacing/ Indentation",
+        "Tab Home/ nhóm Clipboard/ cửa sổ Paragraph/ Spacing/ Line Spacing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 75,
+      "question": "Để đánh dấu đề mục, ta thực hiện thao tác",
+      "options": [
+        "Tab Home/ nhóm Paragraph/ Bullets",
+        "Tab Home/ nhóm Font/ Numbering",
+        "Tab Home/ nhóm Font/ Bullets",
+        "Tab Home/ nhóm Clipboard/ Bullets"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 76,
+      "question": "Để đánh số đề mục, ta thực hiện thao tác",
+      "options": [
+        "Tab Home/ nhóm Paragraph/ Numbering",
+        "Tab Home/ nhóm Font/ Bullets",
+        "Tab Home/ nhóm Font/ Numbering",
+        "Tab Home/ nhóm Clipboard/ Numbering"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 77,
+      "question": "Để tạo đường viền nghệ thuật cho một trang văn bản ta thực hiện:",
+      "options": [
+        "Home/Paragraph/Border and Shading/chọn Tab Page Border/ Trong mục Style chọn Art",
+        "File/Paragraph/Border and Shading/chọn Tab Page Border/ Trong mục Style chọn Art",
+        "Page Layout/Paragraph/Border and Shading/chọn Tab Page Border/ Trong mục Style chọn Art",
+        "Insert/Paragraph/Border and Shading/chọn Tab Page Border/ Trong mục Style chọn Art"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 78,
+      "question": "Để tạo đường viền cho một đoạn văn bản, ta thực hiện:",
+      "options": [
+        "Tab Home/ nhóm Paragraph/ Border and Shading",
+        "Tab Home/ nhóm Font/ Border",
+        "Tab Page Layout/ nhóm Paragraph/ Border",
+        "Tab Design/ nhóm Paragraph/ Border"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 79,
+      "question": "Để tạo đường viền cho trang đầu tiên trong văn bản ta thực hiện:",
+      "options": [
+        "Mở hộp thoại Border and Shading/ Trong mục Apply to chọn This section- First Page Only",
+        "Mở hộp thoại Border and Shading/ Trong mục Apply to chọn Whole Document",
+        "Mở hộp thoại Border and Shading/ Trong mục Apply to chọn This section",
+        "Mở hộp thoại Border and Shading/ Trong mục Apply to chọn This section- All except first page"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 80,
+      "question": "Để thay đổi định dạng cho Style có sẵn trong Word ta làm thế nào?",
+      "options": [
+        "Vào Tab Home/ Trong nhóm Styles/ chuột phải vào Style bạn muốn thay đổi định dạng và chọn Modify.",
+        "Vào Tab Reference/ Trong nhóm Styles/ chuột phải vào Style bạn muốn thay đổi định dạng và chọn Modify.",
+        "Vào Tab View/ Trong nhóm Styles/ chuột phải vào Style bạn muốn thay đổi định dạng và chọn Modify.",
+        "Vào Tab Format/ Trong nhóm Styles/ chuột phải vào Style bạn muốn thay đổi định dạng và chọn Modify."
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 81,
+      "question": "Để áp dụng Style cho một đoạn văn bản bất kì ta thực hiện như sau:",
+      "options": [
+        "Chọn đoạn văn bản cần áp dụng Style. Vào Tab Home/ Trong nhóm Styles/ chọn Style muốn áp dụng",
+        "Chọn đoạn văn bản cần áp dụng Style. Vào Tab View/ Trong nhóm Styles/ chọn Style muốn áp dụng",
+        "Chọn đoạn văn bản cần áp dụng Style. Vào Tab Review/ Trong nhóm Styles/ chọn Style muốn áp dụng",
+        "Chọn đoạn văn bản cần áp dụng Style. Vào Tab Insert/ Trong nhóm Styles/ chọn Style muốn áp dụng"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 82,
+      "question": "Tổ hợp phím Ctrl+Shift+C có tác dụng gì?",
+      "options": [
+        "Copy định dạng trong Word",
+        "Copy kích thước Font chữ",
+        "Copy dữ liệu trong Word",
+        "Định dạng dữ liệu trong Word"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 83,
+      "question": "Bảng có kích thước 5x6 có nghĩa là",
+      "options": [
+        "Bảng gồm 5 cột 6 dòng",
+        "Bảng gồm 5 dòng 6 cột",
+        "Bảng gồm 30 dòng",
+        "Bảng gồm 30 cột"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 84,
+      "question": "Để chèn một bảng(Table) vào văn bản ta làm thế nào?",
+      "options": [
+        "Vào Tab Insert/ Table/ Insert Table/ Gõ số hàng số cột",
+        "Vào Tab Insert/ Insert Table/ Gõ số hàng số cột",
+        "Vào Tab Home/ Table/ Insert Table/ Gõ số hàng số cột",
+        "Vào Tab View/ Table/ Insert Table/ Gõ số hàng số cột"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 85,
+      "question": "Để thay đổi hướng chữ trong một ô trong bảng ta làm thế nào?",
+      "options": [
+        "Chọn ô cần thay đổi hướng chữ/Vào Tab Table Tools/ Layout/ Chọn Text Direction",
+        "Chọn ô cần thay đổi hướng chữ/Vào Tab Table Tools/ Design/ Chọn Text Direction",
+        "Chọn ô cần thay đổi hướng chữ/Vào Tab Insert/ Layout/ Text Direction",
+        "Chọn ô cần thay đổi hướng chữ/Vào Tab Insert/ Design/ Chọn Text Direction"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 86,
+      "question": "Khi soạn thảo văn bản trong Microsoft word, muốn di chuyển từ 1 ô này sang ô kế tiếp về bên phải của một bảng (Table) ta bấm phím:",
+      "options": [
+        "Tab",
+        "ESC",
+        "Ctrl",
+        "CapsLock"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 87,
+      "question": "Trong chế độ tạo bảng (Table) của phần mềm Microsoft word, để gộp nhiều ô thành một ô, ta thực hiện :",
+      "options": [
+        "Table Tool/Layout/ Merge Cells",
+        "Table Tool/Layout/ Split Cells",
+        "Table Tools/ Merge Cells",
+        "Table Tool/ Split Cells"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 88,
+      "question": "Để thay đổi độ rộng của một ô trong bảng ta làm thế nào?",
+      "options": [
+        "Chọn ô cần thay đổi độ rộng/ Table Tools/ Layout/ Trong nhóm Cell Size chọn Width",
+        "Chọn ô cần thay đổi độ rộng/Vào Table Tools/ Design/ Trong nhóm Cell Size chọn Width",
+        "Chọn ô cần thay đổi độ rộng/Vào Home/ Layout/ Trong nhóm Cell Size chọn Width",
+        "Chọn ô cần thay đổi độ rộng/Vào View/ Layout/ Trong nhóm Cell Size chọn Width"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 89,
+      "question": "Để thay đổi kiểu đường viền cho một ô ta làm thế nào?",
+      "options": [
+        "Chọn ô cần thay đổi đường viền/Vào Table Tools/ Design/ Chọn Border and Shading/ Chọn kiểu dáng đường viền cần thay đổi trong mục Style/ Ok",
+        "Chọn ô cần thay đổi đường viền/Vào Table Tools/ Layout/ Chọn Border and Shading/ Chọn kiểu dáng đường viền cần thay đổi trong mục Style/ Ok",
+        "Chọn ô cần thay đổi đường viền/Vào Home/ Layout/ Chọn Border and Shading/ Chọn kiểu dáng đường viền cần thay đổi trong mục Style/ Ok",
+        "Chọn ô cần thay đổi đường viền/Vào Home/ Design/ Chọn Border and Shading/ Chọn kiểu dáng đường viền cần thay đổi trong mục Style/ Ok"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 90,
+      "question": "Để đổ màu cho một ô trong bảng ta thực hiện?",
+      "options": [
+        "Chọn ô cần đổ màu/Vào Table Tools/ Design/ Chọn biểu tượng Shading",
+        "Chọn ô cần đổ màu/Vào Table Tools/ Layout/ Chọn biểu tượng Shading",
+        "Chọn ô cần đổ màu/Vào Home/ Design/ Chọn biểu tượng Shading",
+        "Chọn ô cần đổ màu/Vào Home/ Layout/ Chọn biểu tượng Shading"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 91,
+      "question": "Để xóa bảng khỏi văn bản ta thực hiện như thế nào?",
+      "options": [
+        "Chọn bảng cần xóa/Vào Layout/ Chọn Delete Table",
+        "Chọn bảng cần xóa/Vào Design/ Chọn Delete Table",
+        "Chọn bảng cần xóa/Vào Home/ Chọn Delete Table",
+        "Chọn bảng cần xóa/Vào Insert/ Chọn Delete Table"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 92,
+      "question": "Trong Microsoft Word để thực hiện vẽ các đường thẳng, hình khối, ta thực hiện:",
+      "options": [
+        "Insert/ Illustrations/ Shapes",
+        "View/ Toolbars/ Drawing",
+        "View/ Toolbars/ Standard",
+        "View / Show/Hide / Ruler"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 93,
+      "question": "Trong Microsoft Word để chèn biểu đồ vào văn bản, ta thực hiện:",
+      "options": [
+        "Insert/ Illustrations/ Chart",
+        "References/ Illustrations/ Chart",
+        "Mailings/ Illustrations/ Chart",
+        "Review/ Illustrations/ Chart"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 94,
+      "question": "Các đối tượng đồ họa trong Word nằm trong nhóm nào?",
+      "options": [
+        "Tab Insert/ nhóm Illustrations",
+        "Tab Home/ nhóm Illustrations",
+        "Tab Design/ nhóm Illustrations",
+        "Tab Design/ nhóm Pictures"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 95,
+      "question": "Tab Insert/ nhóm Illustrations/Picture có chức năng",
+      "options": [
+        "Chèn hình ảnh",
+        "Chèn biểu đồ",
+        "Chèn ký tự đặc biệt",
+        "Chèn bảng"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 96,
+      "question": "Khi chèn hình ảnh vào Word, ta có thể",
+      "options": [
+        "Tất cả (1), (2) và (3) đều đúng",
+        "Xoay ảnh, chỉnh độ sáng cho ảnh (1)",
+        "Cắt ảnh, chỉnh độ mờ cho ảnh (2)",
+        "Chèn nhiều ảnh cùng 1 lúc (3)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 97,
+      "question": "Để chèn một Textbox vào văn bản ta làm thế nào?",
+      "options": [
+        "Vào Insert/ Chọn Textbox",
+        "Vào Home/ Chọn Textbox",
+        "Vào View/ Chọn Textbox",
+        "Vào Review/ Chọn Textbox"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 98,
+      "question": "Để thay đổi màu sắc đường viền Textbox ta thực hiện?",
+      "options": [
+        "Vào Format/Chọn Shape Outline/ Chọn màu sắc cần thay đổi",
+        "Vào Insert/Chọn Shape Outline/ Chọn màu sắc cần thay đổi",
+        "Vào Home/Chọn Shape Outline/ Chọn màu sắc cần thay đổi",
+        "Vào Format/Chọn Shape Fill/ Chọn màu sắc cần thay đổi"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 99,
+      "question": "Để lưu Text box vào văn bản đã soạn thảo, sau khí chèn và hiệu chỉnh xong Text box ta cần",
+      "options": [
+        "Ấn Ctrl +S",
+        "Ấn Alt +S",
+        "Ấn Shift +S",
+        "Ấn Ctrl+Shift +S"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 100,
+      "question": "Để thêm chú thích (footnote) ta thực hiện:",
+      "options": [
+        "Vào References/ Chọn Insert Footnote",
+        "Vào Page Layout/ Chọn Insert Footnote",
+        "Vào Review/ Chọn Insert Footnote",
+        "Vào Insert/ Chọn Insert Footnote"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 101,
+      "question": "Để đánh số trang văn bản ta thực hiện:",
+      "options": [
+        "Vào Insert/ Chọn Page Number",
+        "Vào References/ Chọn Page Number",
+        "Vào Page Layout/ Chọn Page Number",
+        "Vào Home/ Chọn Page Number"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 102,
+      "question": "Tổ hợp phím Ctrl+J dùng để làm gì?",
+      "options": [
+        "Căn văn bản đều hai bên",
+        "Căn lề trái văn bản",
+        "Căn lề phải văn bản",
+        "Căn giữa văn bản"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 103,
+      "question": "Trong Microsoft Word để ngắt trang ta thực hiện:",
+      "options": [
+        "Insert/ Pages/ Page Break",
+        "View/ Page Break",
+        "References/ Captions/ Break",
+        "Review/ Create/ Page Break"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 104,
+      "question": "Trong Microsoft Word để chèn header hoặc footer trên trang văn bản, ta thực hiện:",
+      "options": [
+        "Insert / Header and Footer / nhấn nút Header hoặc Footer",
+        "View / Header and Footer",
+        "Insert / Header and Footer",
+        "Format / Header and Footer"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 105,
+      "question": "Hướng Portrait hiển thị văn bản theo",
+      "options": [
+        "Hướng dọc",
+        "Hướng ngang",
+        "Hướng nghiêng 45 độ",
+        "Hướng kết hợp giữa dọc và ngang"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 106,
+      "question": "Hướng in mặc định trong word là hướng gì?",
+      "options": [
+        "Hướng dọc",
+        "Hướng ngang",
+        "Hướng nghiêng 45 độ",
+        "Hướng kết hợp giữa dọc và ngang"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 107,
+      "question": "Lề trang tài liệu là gì",
+      "options": [
+        "Là khoảng cách giữa cạnh giấy và văn bản trong tài liệu",
+        "Là khoảng cách trong tài liệu",
+        "Là khoảng cách được tạo do người trình bày văn bản thiết lập",
+        "Là khoảng cách ảo được đo bằng thước ngang"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 108,
+      "question": "Hướng Landscape hiển thị văn bản theo",
+      "options": [
+        "Hướng ngang",
+        "Hướng dọc",
+        "Hướng nghiêng 45 độ",
+        "Hướng kết hợp giữa dọc và ngang"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 109,
+      "question": "Để thay đổi hướng giấy in ta thực hiện",
+      "options": [
+        "Tab Page Layout/ nhóm Page Setup/ Orientation",
+        "Tab Design/ nhóm Page Setup/ Orientation",
+        "Tab Page Layout/ nhóm Page Setup/ Portrait",
+        "Tab Design/ nhóm Page Setup/ Landscape"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 110,
+      "question": "Trong soạn thảo Microsoft word, muốn định dạng lại trang giấy in, ta thực hiện",
+      "options": [
+        "File/ Page Setup",
+        "File/ Properties",
+        "File/ Print",
+        "File/ Print Preview"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 111,
+      "question": "Để thay đổi lề trang văn bản, ta thực hiện",
+      "options": [
+        "Tab Page Layout/ nhóm Paper Setup/ Margins",
+        "Tab Page Layout/ nhóm Page Setup/ Design",
+        "Tab Page Layout/ nhóm Page Setup/ Size",
+        "Tab Page Layout/ nhóm Page Setup/ Orientation"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 112,
+      "question": "Để xem danh sách các tài liệu đang đợi để in, ta làm thế nào?",
+      "options": [
+        "Kích đúp chuột vào biểu tượng máy in ở thanh taskbar",
+        "Kích phải chuột vào biểu tượng máy in ở thanh taskbar",
+        "Kích chuột trái vào biểu tượng máy in ở thanh taskbar",
+        "Kích đúp chuột vào biểu tượng máy in ở thanh taskbar /Chọn máy in muốn xem."
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 113,
+      "question": "Để hủy lệnh in ta làm thế nào?",
+      "options": [
+        "Kích đúp chuột vào biểu tượng máy in ở thanh taskbar/ Chuột phải vào tài liệu muốn hủy lệnh in/ Chọn Cancel",
+        "Kích đúp chuột vào biểu tượng máy in ở thanh taskbar/ Chuột phải vào tài liệu muốn hủy lệnh in/ Chọn Pause",
+        "Kích đúp chuột vào biểu tượng máy in ở thanh taskbar/ Chuột phải vào tài liệu muốn hủy lệnh in/ Chọn Properties",
+        "Kích đúp chuột vào biểu tượng máy in ở thanh taskbar/ Chuột phải vào tài liệu muốn hủy lệnh in/ Chọn Restart"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 114,
+      "question": "Để xem tài liệu trước khi in, ta chọn lệnh",
+      "options": [
+        "Print Preview",
+        "Print Demo",
+        "Print Layout",
+        "Print Test"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 115,
+      "question": "Để lưu văn bản sang file .pdf ta thực hiện?",
+      "options": [
+        "Vào File/Save/Trong mục Save as Type chọn PDF(*.pdf).",
+        "Vào Home/Save/Trong mục Save as Type chọn PDF(*.pdf).",
+        "Vào Insert/Save/Trong mục Save as Type chọn PDF(*.pdf).",
+        "Vào View/Save/Trong mục Save as Type chọn PDF(*.pdf)."
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 116,
+      "question": "Để đặt mật khẩu cho văn bản ta làm thế nào:",
+      "options": [
+        "Vào File/ Info/Chọn Protect Document/ Encrypt with Password",
+        "Vào Home/ Info/Chọn Protect Document/ Encrypt with Password",
+        "Vào Insert/ Info/Chọn Protect Document/ Encrypt with Password",
+        "Vào View/ Info/Chọn Protect Document/ Encrypt with Password"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 117,
+      "question": "Để đính kèm văn bản vào Email ta thực hiện:",
+      "options": [
+        "Vào File/Save & Send/ Send Using E_mail",
+        "Vào Home/Save & Send/ Send Using E_mail",
+        "Vào Insert/Save & Send/ Send Using E_mail",
+        "Vào View/Save & Send/ Send Using E_mail"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 118,
+      "question": "Để lưu văn bản trên môi trường mạng ta thực hiện:",
+      "options": [
+        "Vào File/Save & Send/ Save to Web",
+        "Vào Home/Save & Send/ Save to Web",
+        "Vào Insert/Save & Send/ Save to Web",
+        "Vào View/Save & Send/ Save to Web"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 119,
+      "question": "Muốn sử dụng Wizard để tạo một bức thư có sẵn, ta thực hiện?",
+      "options": [
+        "Vào File/New/ Letters/ Chọn mẫu Letter muốn tạo/Download",
+        "Ấn Ctrl+N/ Chọn Letters/ Chọn mẫu Letter muốn tạo/Download",
+        "Vào Home/New/ Letters/ Chọn mẫu Letter muốn tạo/Download",
+        "Vào New/ Letters/ Chọn mẫu Letter muốn tạo/Download"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "number": 120,
+      "question": "Font chữ yêu cầu theo thông tư 01 về thể thức trình bày văn bản là?",
+      "options": [
+        "Times New Roman",
+        "Arial",
+        "Tahoma",
+        "VNTime"
+      ],
+      "correctIndex": 0
+    }
+  ]
+}

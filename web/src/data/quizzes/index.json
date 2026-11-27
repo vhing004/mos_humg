@@ -1,0 +1,50 @@
+[
+  {
+    "id": "module01",
+    "code": "Module 01",
+    "title": "Hiểu biết về CNTT cơ bản",
+    "category": "foundation",
+    "description": "Phần cứng, phần mềm, hệ điều hành, mạng máy tính, bảo mật và pháp luật CNTT.",
+    "questionCount": 120
+  },
+  {
+    "id": "module02",
+    "code": "Module 02",
+    "title": "Sử dụng máy tính cơ bản",
+    "category": "foundation",
+    "description": "Thao tác Windows, quản lý tệp/thư mục, tiện ích hệ thống và gõ tiếng Việt.",
+    "questionCount": 120
+  },
+  {
+    "id": "module03",
+    "code": "Module 03",
+    "title": "Xử lý văn bản cơ bản (MS Word)",
+    "category": "word",
+    "description": "Soạn thảo, định dạng văn bản, bảng biểu, hình ảnh, trộn thư và in ấn trong Word.",
+    "questionCount": 120
+  },
+  {
+    "id": "module04",
+    "code": "Module 04",
+    "title": "Sử dụng bảng tính cơ bản (MS Excel)",
+    "category": "excel",
+    "description": "Địa chỉ ô, công thức, hàm SUM/IF/COUNT/VLOOKUP, định dạng và biểu đồ Excel.",
+    "questionCount": 120
+  },
+  {
+    "id": "module05",
+    "code": "Module 05",
+    "title": "Sử dụng trình chiếu cơ bản (MS PowerPoint)",
+    "category": "ppt",
+    "description": "Thiết kế slide, Slide Master, SmartArt, hiệu ứng Animation/Transition và trình chiếu.",
+    "questionCount": 120
+  },
+  {
+    "id": "module06",
+    "code": "Module 06",
+    "title": "Sử dụng Internet cơ bản",
+    "category": "foundation",
+    "description": "Trình duyệt web, tìm kiếm thông tin, thư điện tử (Email) và an toàn trực tuyến.",
+    "questionCount": 120
+  }
+]
