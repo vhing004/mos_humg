@@ -78,6 +78,16 @@ export interface ExcelTheoryPoint {
   tip?: string;
 }
 
+export interface ExcelExamStep {
+  stepNumber: number;
+  title: string;
+  requirement: string;
+  analysis: string[];
+  formulaPattern: string;
+  tip?: string;
+  targetRefs: string[];
+}
+
 export interface ExcelInteractiveLab {
   id: string;
   group: 'lesson' | 'exam';
@@ -86,6 +96,7 @@ export interface ExcelInteractiveLab {
   description: string;
   imageUrl?: string;
   theoryPoints?: ExcelTheoryPoint[];
+  steps?: ExcelExamStep[];
   instructions: string[];
   colHeaders: string[];
   rows: (string | number | null)[][];

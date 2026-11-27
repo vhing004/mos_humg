@@ -5,7 +5,10 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  Eye,
+  EyeOff,
   HelpCircle,
+  Lightbulb,
   List,
   Lock,
   MousePointerClick,
@@ -92,6 +95,15 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     col: number;
     insertAt: number;
     lastLen: number;
+  } | null>(null);
+  // Chế độ làm lần lượt từng câu (5 đề thi Excel)
+  const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [showStepHint, setShowStepHint] = useState(false);
+  const [ackSteps, setAckSteps] = useState<Record<string, boolean>>({});
+  const [stepCheckSummary, setStepCheckSummary] = useState<{
+    stepNumber: number;
+    correct: number;
+    total: number;
   } | null>(null);
 
   // Trạng thái kéo chọn vùng tham chiếu
@@ -240,8 +252,56 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
     setShowHint(false);
     setDeZoom(1);
     setTouchRangeStart(null);
+    setCurrentStepIdx(0);
+    setShowStepHint(false);
+    setStepCheckSummary(null);
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setShowLabList(false);
+    }
+  };
+
+  const steps = lab.steps ?? [];
+  const activeStep = steps[currentStepIdx];
+  const activeStepTargetSet = useMemo(
+    () => new Set(activeStep?.targetRefs ?? []),
+    [activeStep]
+  );
+
+  const handleSelectStep = (idx: number) => {
+    const nextStep = steps[idx];
+    setCurrentStepIdx(idx);
+    setShowStepHint(false);
+    setStepCheckSummary(null);
+    if (nextStep && nextStep.targetRefs.length > 0) {
+      const firstRef = nextStep.targetRefs[0];
+      setActiveRef(firstRef);
+      setCursorPos((currentInputs[firstRef] ?? '').length);
+    }
+  };
+
+  const handleCheckStep = () => {
+    if (!activeStep || activeStep.targetRefs.length === 0) return;
+    const nextResults: Record<string, boolean> = { ...(checkResults ?? {}) };
+    let correct = 0;
+    for (const ref of activeStep.targetRefs) {
+      const t = targetByRef.get(ref);
+      if (!t) continue;
+      const raw = (currentInputs[t.ref] ?? '').trim();
+      const val = computedGrid[t.row]?.[t.col];
+      const ok = raw.startsWith('=') && valuesMatch(val, t.expectedValue);
+      nextResults[t.ref] = ok;
+      if (ok) correct += 1;
+    }
+    setCheckResults(nextResults);
+    setStepCheckSummary({
+      stepNumber: activeStep.stepNumber,
+      correct,
+      total: activeStep.targetRefs.length,
+    });
+    // Nếu tất cả các ô của cả đề đều đúng thì đánh dấu hoàn thành bài
+    const allCorrect = lab.targets.every((t) => nextResults[t.ref] === true);
+    if (allCorrect) {
+      onCompleteLab(lab.id);
     }
   };
 
@@ -750,15 +810,233 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
             </div>
           )}
 
-          {/* Hướng dẫn từng câu */}
-          <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-100 space-y-1">
-            <div className="text-xs font-bold text-slate-700 uppercase">Yêu cầu bài tập:</div>
-            <ul className="list-disc pl-5 text-xs sm:text-sm text-slate-700 space-y-1">
-              {lab.instructions.map((ins, i) => (
-                <li key={i}>{ins}</li>
-              ))}
-            </ul>
-          </div>
+          {/* Chế độ làm lần lượt từng câu có phân tích chi tiết (5 đề thi Excel) */}
+          {activeStep ? (
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-3.5">
+              {/* Thanh chọn từng câu: Câu 1 -> Câu N */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap gap-1.5">
+                  {steps.map((st, idx) => {
+                    const isCurrent = idx === currentStepIdx;
+                    const ackKey = `${lab.id}:${st.stepNumber}`;
+                    const allStepOk =
+                      st.targetRefs.length > 0
+                        ? st.targetRefs.every((r) => checkResults?.[r] === true)
+                        : !!ackSteps[ackKey];
+                    const hasStepErr =
+                      st.targetRefs.length > 0 &&
+                      st.targetRefs.some((r) => checkResults?.[r] === false);
+
+                    let btnCls = 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100';
+                    if (allStepOk) {
+                      btnCls = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                    } else if (hasStepErr) {
+                      btnCls = 'bg-rose-100 text-rose-800 border-rose-300';
+                    }
+                    if (isCurrent) {
+                      btnCls = 'bg-indigo-600 text-white border-indigo-600 shadow-xs';
+                    }
+
+                    return (
+                      <button
+                        key={st.stepNumber}
+                        type="button"
+                        onClick={() => handleSelectStep(idx)}
+                        className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${btnCls}`}
+                      >
+                        Câu {st.stepNumber}
+                      </button>
+                    );
+                  })}
+                </div>
+                <span className="text-[11px] font-semibold text-slate-500">
+                  Bước {currentStepIdx + 1}/{steps.length}
+                </span>
+              </div>
+
+              {/* Nội dung câu hiện tại: Yêu cầu + Phân tích chi tiết */}
+              <div className="bg-white rounded-xl p-4 border border-slate-200 space-y-3">
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                    {activeStep.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-700 mt-1">
+                    <strong>Yêu cầu:</strong> {activeStep.requirement}
+                  </p>
+                  {activeStep.targetRefs.length > 0 && (
+                    <div className="text-[11px] text-indigo-700 font-semibold mt-1">
+                      Các ô cần làm: {activeStep.targetRefs.join(', ')}
+                    </div>
+                  )}
+                </div>
+
+                {/* Phân tích tư duy cách giải */}
+                <div className="bg-indigo-50/70 rounded-xl p-3 border border-indigo-100 space-y-1.5">
+                  <div className="text-xs font-bold text-indigo-800 flex items-center gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5" /> Phân tích cách giải chi tiết:
+                  </div>
+                  <ul className="space-y-1 text-xs text-slate-700 leading-relaxed">
+                    {activeStep.analysis.map((line, i) => (
+                      <li key={i} className="flex items-start gap-1.5">
+                        <span className="text-indigo-500 font-bold">•</span>
+                        <span>{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Nút Ẩn/Hiện gợi ý + Hành động kiểm tra câu */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowStepHint((v) => !v)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors ${
+                        showStepHint
+                          ? 'bg-amber-600 text-white border-amber-600'
+                          : 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+                      }`}
+                    >
+                      {showStepHint ? (
+                        <>
+                          <EyeOff className="w-3.5 h-3.5" /> Ẩn gợi ý cách làm
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="w-3.5 h-3.5" /> Xem gợi ý cách làm
+                        </>
+                      )}
+                    </button>
+
+                    {activeStep.targetRefs.length > 0 ? (
+                      <button
+                        type="button"
+                        onClick={handleCheckStep}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors"
+                      >
+                        <Play className="w-3.5 h-3.5" /> Kiểm tra Câu {activeStep.stepNumber}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setAckSteps((prev) => ({
+                            ...prev,
+                            [`${lab.id}:${activeStep.stepNumber}`]: true,
+                          }))
+                        }
+                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+                          ackSteps[`${lab.id}:${activeStep.stepNumber}`]
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                            : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                        }`}
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        {ackSteps[`${lab.id}:${activeStep.stepNumber}`]
+                          ? 'Đã xác nhận hiểu'
+                          : 'Xác nhận đã hiểu bước này'}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex gap-1.5">
+                    <button
+                      type="button"
+                      disabled={currentStepIdx === 0}
+                      onClick={() => handleSelectStep(currentStepIdx - 1)}
+                      className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold disabled:opacity-40"
+                    >
+                      ← Câu trước
+                    </button>
+                    <button
+                      type="button"
+                      disabled={currentStepIdx >= steps.length - 1}
+                      onClick={() => handleSelectStep(currentStepIdx + 1)}
+                      className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold disabled:opacity-40"
+                    >
+                      Câu tiếp →
+                    </button>
+                  </div>
+                </div>
+
+                {/* Khối gợi ý công thức (ẩn/hiện theo nút) */}
+                {showStepHint && (
+                  <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs font-bold text-amber-900">
+                        Công thức mẫu:
+                      </span>
+                      {activeStep.targetRefs.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const firstRef = activeStep.targetRefs[0];
+                            const firstTarget = targetByRef.get(firstRef);
+                            if (firstTarget) {
+                              setActiveRef(firstRef);
+                              handleCellChange(
+                                firstRef,
+                                firstTarget.expectedFormula,
+                                firstTarget.expectedFormula.length
+                              );
+                            }
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-semibold"
+                        >
+                          Điền mẫu ô đầu ({activeStep.targetRefs[0]})
+                        </button>
+                      )}
+                    </div>
+                    <code className="block px-2.5 py-1.5 rounded-lg bg-slate-900 text-emerald-300 text-xs font-mono overflow-x-auto">
+                      {activeStep.formulaPattern}
+                    </code>
+                    {activeStep.tip && (
+                      <p className="text-xs text-amber-900">
+                        <strong>Lưu ý:</strong> {activeStep.tip}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Kết quả kiểm tra riêng của câu hiện tại */}
+                {stepCheckSummary && stepCheckSummary.stepNumber === activeStep.stepNumber && (
+                  <div
+                    className={`p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between gap-2 ${
+                      stepCheckSummary.correct === stepCheckSummary.total
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        : 'bg-rose-50 text-rose-800 border border-rose-200'
+                    }`}
+                  >
+                    <span>
+                      {stepCheckSummary.correct === stepCheckSummary.total
+                        ? `Chính xác! Bạn đã làm đúng ${stepCheckSummary.correct}/${stepCheckSummary.total} ô của Câu ${stepCheckSummary.stepNumber}.`
+                        : `Câu ${stepCheckSummary.stepNumber}: Đúng ${stepCheckSummary.correct}/${stepCheckSummary.total} ô. Các ô đỏ là chưa đúng công thức/giá trị.`}
+                    </span>
+                    {stepCheckSummary.correct === stepCheckSummary.total &&
+                      currentStepIdx < steps.length - 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleSelectStep(currentStepIdx + 1)}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] shrink-0"
+                        >
+                          Sang Câu {activeStep.stepNumber + 1} →
+                        </button>
+                      )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* Hướng dẫn từng câu (cho các bài học hàm) */
+            <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-100 space-y-1">
+              <div className="text-xs font-bold text-slate-700 uppercase">Yêu cầu bài tập:</div>
+              <ul className="list-disc pl-5 text-xs sm:text-sm text-slate-700 space-y-1">
+                {lab.instructions.map((ins, i) => (
+                  <li key={i}>{ins}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Mẹo thao tác nhanh */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-600 bg-indigo-50/70 px-3 py-2 rounded-xl border border-indigo-100">
@@ -964,9 +1242,11 @@ export const ExcelSandbox: React.FC<ExcelSandboxProps> = ({
                       }
 
                       const isActive = activeRef === target.ref;
+                      const inCurrentStep = activeStepTargetSet.has(target.ref);
                       const status = checkResults?.[target.ref];
-                      let cellStyle =
-                        'bg-emerald-50/70 hover:bg-emerald-50 text-slate-900';
+                      let cellStyle = inCurrentStep
+                        ? 'bg-indigo-50/70 hover:bg-indigo-50 text-slate-900 ring-1 ring-inset ring-indigo-300'
+                        : 'bg-emerald-50/70 hover:bg-emerald-50 text-slate-900';
                       if (status === true) {
                         cellStyle = 'bg-emerald-100 text-emerald-900 font-semibold';
                       } else if (status === false) {

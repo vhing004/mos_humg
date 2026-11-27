@@ -52,6 +52,70 @@ def build_interactive_labs() -> list[dict]:
                 "Cột Thành tích (phút) (G4:G9): Tính = Về đích - Xuất phát (F4-E4).",
                 "Ô H12 & I12: Tính Thành tích cao nhất (MAX) và thấp nhất (MIN) của cột Thành tích (G4:G9).",
             ],
+            "steps": [
+                {
+                    "stepNumber": 1,
+                    "title": "Câu 1: Điền cột Nội dung thi (D4:D9)",
+                    "requirement": "Dựa vào ký tự đầu của Mã số (M, B, C) để tra tên Nội dung thi từ bảng phụ ở dưới.",
+                    "analysis": [
+                        "Bước 1 — Xác định giá trị dò: Mã số ở cột A có dạng 'M1', 'B2', 'C4', trong khi bảng phụ ($A$11:$D$13) chỉ ghi ký tự đầu 'M', 'B', 'C'. Vì vậy phải dùng LEFT(A4, 1) để cắt lấy 1 ký tự bên trái.",
+                        "Bước 2 — Chọn hàm dò: Bảng phụ xếp theo cột dọc nên dùng VLOOKUP.",
+                        "Bước 3 — Xác định vùng bảng phụ & cột lấy: Vùng $A$11:$D$13 (nhấn F4 khóa tuyệt đối để kéo xuống không bị lệch), Nội dung thi nằm ở cột thứ 2, dò chính xác nên đối số cuối là 0."
+                    ],
+                    "formulaPattern": "=VLOOKUP(LEFT(A4,1), $A$11:$D$13, 2, 0)",
+                    "tip": "Nhớ khóa bảng phụ $A$11:$D$13 bằng phím F4 rồi mới kéo Fill Handle từ D4 xuống D9.",
+                    "targetRefs": ["D4", "D5", "D6", "D7", "D8", "D9"]
+                },
+                {
+                    "stepNumber": 2,
+                    "title": "Câu 2: Tính giờ Xuất phát theo Phái (E4:E9)",
+                    "requirement": "Tra giờ xuất phát (đã quy đổi ra phút) dựa vào cả Mã số (M/B/C) và Phái (Nam/Nữ).",
+                    "analysis": [
+                        "Bước 1 — Vẫn dò theo dòng bằng LEFT(A4, 1) trong bảng $A$11:$D$13.",
+                        "Bước 2 — Chọn cột linh hoạt theo Phái: Trong bảng phụ, cột 3 là giờ xuất phát của Nữ, cột 4 là của Nam.",
+                        "Bước 3 — Lồng hàm IF vào vị trí col_index_num của VLOOKUP: nếu C4=\"Nữ\" thì lấy cột 3, ngược lại lấy cột 4."
+                    ],
+                    "formulaPattern": '=VLOOKUP(LEFT(A4,1), $A$11:$D$13, IF(C4="Nữ",3,4), 0)',
+                    "tip": "Chữ \"Nữ\" phải đặt trong ngoặc kép và gõ đúng dấu tiếng Việt như trong cột C.",
+                    "targetRefs": ["E4", "E5", "E6", "E7", "E8", "E9"]
+                },
+                {
+                    "stepNumber": 3,
+                    "title": "Câu 3: Tính Thành tích chạy (G4:G9)",
+                    "requirement": "Tính thời gian chạy thực tế (tính bằng phút) từ lúc Xuất phát đến lúc Về đích.",
+                    "analysis": [
+                        "Bước 1 — Thành tích = Thời điểm Về đích (cột F) trừ đi Thời điểm Xuất phát (cột E).",
+                        "Bước 2 — Do cả hai cột đã quy đổi sẵn sang đơn vị phút nên chỉ cần dùng phép trừ trực tiếp F4 - E4."
+                    ],
+                    "formulaPattern": "=F4-E4",
+                    "tip": "Nếu làm trên Excel thật với định dạng giờ hh:mm, vẫn lấy Về đích - Xuất phát nhưng phải định dạng ô kết quả là [h]:mm.",
+                    "targetRefs": ["G4", "G5", "G6", "G7", "G8", "G9"]
+                },
+                {
+                    "stepNumber": 4,
+                    "title": "Câu 4: Thống kê Thành tích Cao nhất & Thấp nhất (H12, I12)",
+                    "requirement": "Tìm giá trị Thành tích lớn nhất (ô H12) và nhỏ nhất (ô I12) của toàn bộ VĐV.",
+                    "analysis": [
+                        "Bước 1 — Ô H12 (Cao nhất): dùng hàm MAX trên toàn bộ cột Thành tích G4:G9.",
+                        "Bước 2 — Ô I12 (Thấp nhất): dùng hàm MIN trên cùng vùng G4:G9."
+                    ],
+                    "formulaPattern": "=MAX(G4:G9)  và  =MIN(G4:G9)",
+                    "tip": "Có thể gõ =MAX( rồi kéo chọn thẳng vùng G4:G9 trên bảng tính.",
+                    "targetRefs": ["H12", "I12"]
+                },
+                {
+                    "stepNumber": 5,
+                    "title": "Câu 5: Sắp xếp & Rút trích danh sách VĐV (Thao tác Excel)",
+                    "requirement": "Sắp xếp bảng tăng dần theo Thành tích; rút trích các VĐV thi nội dung Maraton sang vùng mới.",
+                    "analysis": [
+                        "Thao tác 1 (Sort): Bôi đen bảng A3:G9 → thẻ Data → Sort → Sort by: Thành tích, Order: Smallest to Largest (tăng dần theo số phút chạy ít nhất).",
+                        "Thao tác 2 (Advanced Filter): Tạo vùng điều kiện gồm 2 ô: tiêu đề 'Nội dung thi' ở trên và 'Maraton' ở dưới → Data → Advanced → Copy to another location → chọn List range, Criteria range và Copy to."
+                    ],
+                    "formulaPattern": "Data → Sort  |  Data → Advanced Filter",
+                    "tip": "Đây là câu thao tác giao diện Excel trên máy tính (không cần nhập công thức trên sheet). Đọc kỹ các bước rồi bấm xác nhận hoàn thành.",
+                    "targetRefs": []
+                }
+            ],
             "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
             "rows": [
                 ["Mã số", "Họ Tên", "Phái", "Nội dung thi", "Xuất phát (phút)", "Về đích (phút)", "Thành tích", "", ""],
@@ -126,6 +190,82 @@ def build_interactive_labs() -> list[dict]:
                 "Cột Chuyên chở (I3:I8): Số lượng * 400 (D3*400).",
                 "Cột Tổng cộng (J3:J8): Trị giá + Thuế + Chuyên chở.",
                 "Dòng 9 (Tổng): Dùng SUM cho G9, H9, I9, J9. Dòng 10–11: MAX và MIN cho cột J.",
+            ],
+            "steps": [
+                {
+                    "stepNumber": 1,
+                    "title": "Câu 1: Tính cột Trị giá (G3:G8)",
+                    "requirement": "Tính Trị giá của từng mặt hàng bằng Số lượng nhân Đơn giá.",
+                    "analysis": [
+                        "Bước 1 — Xác định vị trí dữ liệu dòng đầu tiên (dòng 3): Số lượng nằm ở ô D3, Đơn giá nằm ở ô F3.",
+                        "Bước 2 — Nhân trực tiếp hai ô để ra Trị giá, sau đó kéo Fill Handle xuống đến dòng 8."
+                    ],
+                    "formulaPattern": "=D3*F3",
+                    "tip": "Không khóa $ ở D3 hay F3 vì mỗi dòng có Số lượng và Đơn giá riêng.",
+                    "targetRefs": ["G3", "G4", "G5", "G6", "G7", "G8"]
+                },
+                {
+                    "stepNumber": 2,
+                    "title": "Câu 2: Tính cột Thuế theo điều kiện (H3:H8)",
+                    "requirement": "Nếu Trị giá > 33.000.000 thì Thuế = 7% Trị giá, ngược lại Thuế = 6% Trị giá.",
+                    "analysis": [
+                        "Bước 1 — Bài toán có 2 nhánh điều kiện rõ ràng nên dùng hàm IF(điều_kiện, đúng, sai).",
+                        "Bước 2 — Điều kiện: G3 > 33000000 (viết liền số, tuyệt đối không gõ dấu chấm ngăn cách).",
+                        "Bước 3 — Nếu đúng: G3*7% (hoặc G3*0.07). Nếu sai: G3*6% (hoặc G3*0.06)."
+                    ],
+                    "formulaPattern": "=IF(G3>33000000, G3*7%, G3*6%)",
+                    "tip": "Kiểm tra lại kết quả: các mặt hàng có Trị giá > 33 triệu (như Gạo nếp, Gạo ST24) phải áp mức 7%.",
+                    "targetRefs": ["H3", "H4", "H5", "H6", "H7", "H8"]
+                },
+                {
+                    "stepNumber": 3,
+                    "title": "Câu 3: Tính cột Chuyên chở (I3:I8)",
+                    "requirement": "Tính chi phí Chuyên chở = Số lượng * 400.",
+                    "analysis": [
+                        "Bước 1 — Lấy Số lượng tại ô D3 nhân với hằng số 400.",
+                        "Bước 2 — Kéo công thức từ I3 xuống I8."
+                    ],
+                    "formulaPattern": "=D3*400",
+                    "tip": "Đơn vị tính đã thống nhất là đồng/kg nên nhân trực tiếp với 400.",
+                    "targetRefs": ["I3", "I4", "I5", "I6", "I7", "I8"]
+                },
+                {
+                    "stepNumber": 4,
+                    "title": "Câu 4: Tính cột Tổng cộng (J3:J8)",
+                    "requirement": "Tính Tổng cộng = Trị giá + Thuế + Chuyên chở.",
+                    "analysis": [
+                        "Bước 1 — Cộng 3 cột liền kề là G3, H3 và I3.",
+                        "Bước 2 — Có thể viết =G3+H3+I3 hoặc =SUM(G3:I3) đều cho kết quả giống nhau."
+                    ],
+                    "formulaPattern": "=G3+H3+I3",
+                    "tip": "Kéo Fill Handle từ J3 xuống J8 để hoàn thành cả cột.",
+                    "targetRefs": ["J3", "J4", "J5", "J6", "J7", "J8"]
+                },
+                {
+                    "stepNumber": 5,
+                    "title": "Câu 5: Tính Tổng, Lớn nhất, Nhỏ nhất (Dòng 9–11)",
+                    "requirement": "Tính Tổng cộng cho 4 cột (G9:J9) và tìm Lớn nhất (J10), Nhỏ nhất (J11) của cột Tổng cộng.",
+                    "analysis": [
+                        "Bước 1 — Tại G9, H9, I9, J9: dùng hàm =SUM(cột_từ_dòng_3_đến_8).",
+                        "Bước 2 — Tại J10: dùng =MAX(J3:J8) để tìm Tổng cộng cao nhất.",
+                        "Bước 3 — Tại J11: dùng =MIN(J3:J8) để tìm Tổng cộng thấp nhất."
+                    ],
+                    "formulaPattern": "=SUM(G3:G8)  |  =MAX(J3:J8)  |  =MIN(J3:J8)",
+                    "tip": "Chú ý vùng dữ liệu chỉ từ dòng 3 đến dòng 8 (không quét nhầm vào dòng 9 Tổng khi tính MAX/MIN).",
+                    "targetRefs": ["G9", "H9", "I9", "J9", "J10", "J11"]
+                },
+                {
+                    "stepNumber": 6,
+                    "title": "Câu 6: Định dạng số & Kẻ khung bảng (Thao tác Excel)",
+                    "requirement": "Định dạng các cột tiền có dấu phân cách hàng ngàn, kẻ viền và căn giữa tiêu đề.",
+                    "analysis": [
+                        "Thao tác 1 — Định dạng số: Chọn vùng D3:D8 và F3:J11 → thẻ Home → bấm nút Comma Style (,) rồi bấm Decrease Decimal 2 lần để bỏ phần thập phân .00.",
+                        "Thao tác 2 — Kẻ khung: Chọn toàn bảng → Home → Borders → All Borders."
+                    ],
+                    "formulaPattern": "Home → Comma Style (,) → Decrease Decimal",
+                    "tip": "Câu thao tác định dạng trên Excel desktop — đọc hướng dẫn rồi bấm xác nhận để hoàn thành bước này.",
+                    "targetRefs": []
+                }
             ],
             "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
             "rows": [
@@ -216,6 +356,81 @@ def build_interactive_labs() -> list[dict]:
                 "Cột Hỗ trợ giảm (G3:G7): Dùng VLOOKUP theo LEFT(B3,1) lấy cột 3 trong $A$11:$F$13.",
                 "Cột Tặng (H3:H7): Dùng HLOOKUP(E3,$D$10:$F$14,5,0). Cột Còn lại (I3:I7): =F3*(1-G3)-H3.",
             ],
+            "steps": [
+                {
+                    "stepNumber": 1,
+                    "title": "Câu 1: Điền cột Hiệu Tivi (C3:C7)",
+                    "requirement": "Dựa vào ký tự đầu của Mã số ('S', 'P', 'T') để tra tên Hiệu từ bảng giá.",
+                    "analysis": [
+                        "Bước 1 — Dùng LEFT(B3, 1) để tách ký tự đầu của Mã số ('S21' → 'S').",
+                        "Bước 2 — Dùng VLOOKUP dò trong bảng giá $A$11:$F$13 (nhấn F4 khóa vùng), lấy cột thứ 2 (Hiệu), kiểu dò chính xác 0."
+                    ],
+                    "formulaPattern": "=VLOOKUP(LEFT(B3,1), $A$11:$F$13, 2, 0)",
+                    "tip": "Khóa bảng $A$11:$F$13 bằng F4 trước khi kéo xuống C7.",
+                    "targetRefs": ["C3", "C4", "C5", "C6", "C7"]
+                },
+                {
+                    "stepNumber": 2,
+                    "title": "Câu 2: Tách cột Kích cỡ dạng Số (E3:E7)",
+                    "requirement": "Lấy 2 ký tự cuối của Mã số để xác định Kích cỡ (inch) ở dạng số.",
+                    "analysis": [
+                        "Bước 1 — RIGHT(B3, 2) cắt lấy 2 ký tự cuối ('21', '40', '32').",
+                        "Bước 2 — Vì RIGHT trả về chuỗi văn bản (text) nên bắt buộc phải bọc hàm VALUE(...) ra ngoài để chuyển thành số 21, 32, 40."
+                    ],
+                    "formulaPattern": "=VALUE(RIGHT(B3,2))",
+                    "tip": "Nếu quên bọc VALUE(), các câu sau dùng HLOOKUP hoặc so sánh E3=21 sẽ bị lỗi #N/A hoặc sai kết quả!",
+                    "targetRefs": ["E3", "E4", "E5", "E6", "E7"]
+                },
+                {
+                    "stepNumber": 3,
+                    "title": "Câu 3: Tra Giá bán từ bảng 2 chiều (F3:F7)",
+                    "requirement": "Tra Giá bán dựa vào cả Hiệu (dòng) và Kích cỡ (cột 21, 32, 40).",
+                    "analysis": [
+                        "Bước 1 — Dò theo dòng bằng VLOOKUP với lookup_value là LEFT(B3, 1) trong $A$11:$F$13.",
+                        "Bước 2 — Xác định số thứ tự cột (col_index_num): kích cỡ 21 ở cột 4, 32 ở cột 5, 40 ở cột 6.",
+                        "Bước 3 — Dùng IF lồng nhau: IF(E3=21, 4, IF(E3=32, 5, 6))."
+                    ],
+                    "formulaPattern": "=VLOOKUP(LEFT(B3,1), $A$11:$F$13, IF(E3=21,4,IF(E3=32,5,6)), 0)",
+                    "tip": "Thay vì IF lồng nhau, trên Excel bạn cũng có thể dùng MATCH(E3, $A$10:$F$10, 0) tại vị trí cột.",
+                    "targetRefs": ["F3", "F4", "F5", "F6", "F7"]
+                },
+                {
+                    "stepNumber": 4,
+                    "title": "Câu 4: Tra tỷ lệ Hỗ trợ giảm (G3:G7)",
+                    "requirement": "Lấy tỷ lệ Nhà SX hỗ trợ giảm giá theo từng hãng từ bảng phụ.",
+                    "analysis": [
+                        "Bước 1 — Tương tự Câu 1, dùng VLOOKUP(LEFT(B3,1), $A$11:$F$13, 3, 0).",
+                        "Bước 2 — Cột 'Nhà SX hỗ trợ' nằm ở cột thứ 3 trong vùng $A$11:$F$13."
+                    ],
+                    "formulaPattern": "=VLOOKUP(LEFT(B3,1), $A$11:$F$13, 3, 0)",
+                    "tip": "Giá trị trả về là số thập phân (0.2 = 20%, 0.3 = 30%).",
+                    "targetRefs": ["G3", "G4", "G5", "G6", "G7"]
+                },
+                {
+                    "stepNumber": 5,
+                    "title": "Câu 5: Tra tiền Tặng khuyến mãi bằng HLOOKUP (H3:H7)",
+                    "requirement": "Dựa vào Kích cỡ (cột E) để tra tiền Khuyến mãi tặng theo bảng ngang $D$10:$F$14.",
+                    "analysis": [
+                        "Bước 1 — Kích cỡ (21, 32, 40) và dòng Khuyến mãi tặng (200, 1000, 2000) xếp theo hàng ngang nên dùng hàm HLOOKUP.",
+                        "Bước 2 — Vùng bảng $D$10:$F$14: dòng 1 là Kích cỡ (row 10), dòng 5 là Khuyến mãi tặng (row 14) → row_index_num = 5, dò chính xác 0."
+                    ],
+                    "formulaPattern": "=HLOOKUP(E3, $D$10:$F$14, 5, 0)",
+                    "tip": "Đếm đúng số dòng từ D10 đến D14: 10(1), 11(2), 12(3), 13(4), 14(5).",
+                    "targetRefs": ["H3", "H4", "H5", "H6", "H7"]
+                },
+                {
+                    "stepNumber": 6,
+                    "title": "Câu 6: Tính số tiền Còn lại phải trả (I3:I7)",
+                    "requirement": "Tính Còn lại = Giá bán - Tiền hỗ trợ giảm - Tiền tặng.",
+                    "analysis": [
+                        "Bước 1 — Tiền hỗ trợ giảm = Giá bán * Tỷ lệ hỗ trợ (F3 * G3).",
+                        "Bước 2 — Gom gọn công thức: F3 * (1 - G3) - H3 (hoặc F3 - F3*G3 - H3)."
+                    ],
+                    "formulaPattern": "=F3*(1-G3)-H3",
+                    "tip": "Kéo Fill Handle từ I3 xuống I7 để hoàn thành bảng.",
+                    "targetRefs": ["I3", "I4", "I5", "I6", "I7"]
+                }
+            ],
             "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
             "rows": [
                 ["STT", "MÃ SỐ", "HIỆU", "NGÀY BÁN", "KÍCH CỠ", "GIÁ BÁN", "HỖ TRỢ GIẢM", "TẶNG", "CÒN LẠI"],
@@ -303,6 +518,69 @@ def build_interactive_labs() -> list[dict]:
                 "Cột Thưởng ngày làm (H2:H7): Nếu Số ngày làm > 25 thì 200000, ngược lại 0.",
                 "Cột Tổng lương (I2:I7): Lương theo bậc + Tiền thưởng + Thưởng ngày làm.",
             ],
+            "steps": [
+                {
+                    "stepNumber": 1,
+                    "title": "Câu 1: Tính Số ngày làm việc (E2:E7)",
+                    "requirement": "Tính Số ngày làm bằng Đến ngày trừ Từ ngày.",
+                    "analysis": [
+                        "Bước 1 — Lấy ô Đến ngày (D2) trừ đi ô Từ ngày (C2).",
+                        "Bước 2 — Kéo Fill Handle từ E2 xuống E7."
+                    ],
+                    "formulaPattern": "=D2-C2",
+                    "tip": "Không cần cộng thêm 1 trong bài mẫu này (theo đáp án chuẩn của đề).",
+                    "targetRefs": ["E2", "E3", "E4", "E5", "E6", "E7"]
+                },
+                {
+                    "stepNumber": 2,
+                    "title": "Câu 2: Tính Lương theo bậc (F2:F7) — Lưu ý F4 khóa $K$1",
+                    "requirement": "Nếu Chức vụ là 'Trưởng phòng' thì hệ số 4, ngược lại hệ số 2.5, nhân với Lương cơ bản ở ô K1.",
+                    "analysis": [
+                        "Bước 1 — Dùng IF kiểm tra Chức vụ: IF(B2=\"Trưởng phòng\", 4, 2.5).",
+                        "Bước 2 — Nhân kết quả IF với ô Lương cơ bản K1.",
+                        "Bước 3 — Bắt buộc nhấn F4 để khóa thành $K$1 vì ô K1 dùng chung cho cả 6 nhân viên."
+                    ],
+                    "formulaPattern": '=IF(B2="Trưởng phòng", 4, 2.5)*$K$1',
+                    "tip": "Nếu quên khóa $K$1, khi kéo xuống dòng 3 sẽ nhân với K2 (ô trống) làm kết quả bằng 0!",
+                    "targetRefs": ["F2", "F3", "F4", "F5", "F6", "F7"]
+                },
+                {
+                    "stepNumber": 3,
+                    "title": "Câu 3: Tra Tiền thưởng theo Mã NV (G2:G7)",
+                    "requirement": "Dựa vào Mã NV (HC, KT, BV) để tra mức Tiền thưởng trong bảng phụ $A$10:$B$12.",
+                    "analysis": [
+                        "Bước 1 — Dùng VLOOKUP dò ô A2 trong vùng $A$10:$B$12 (nhấn F4 khóa bảng phụ).",
+                        "Bước 2 — Tiền thưởng nằm ở cột thứ 2, dò chính xác nên đối số cuối là 0."
+                    ],
+                    "formulaPattern": "=VLOOKUP(A2, $A$10:$B$12, 2, 0)",
+                    "tip": "Mã NV ở cột A khớp chính xác với bảng phụ nên không cần dùng LEFT.",
+                    "targetRefs": ["G2", "G3", "G4", "G5", "G6", "G7"]
+                },
+                {
+                    "stepNumber": 4,
+                    "title": "Câu 4: Tính Thưởng ngày làm (H2:H7)",
+                    "requirement": "Nếu Số ngày làm > 25 thì thưởng 200.000đ, ngược lại 0đ.",
+                    "analysis": [
+                        "Bước 1 — Dùng IF kiểm tra ô Số ngày làm (E2 > 25).",
+                        "Bước 2 — Đúng trả về 200000, sai trả về 0."
+                    ],
+                    "formulaPattern": "=IF(E2>25, 200000, 0)",
+                    "tip": "Chú ý dấu '>' chứ không phải '>=' (người làm đúng 25 ngày được 0đ).",
+                    "targetRefs": ["H2", "H3", "H4", "H5", "H6", "H7"]
+                },
+                {
+                    "stepNumber": 5,
+                    "title": "Câu 5: Tính Tổng lương thực lĩnh (I2:I7)",
+                    "requirement": "Tổng lương = Lương theo bậc + Tiền thưởng + Thưởng ngày làm.",
+                    "analysis": [
+                        "Bước 1 — Cộng 3 cột F2 + G2 + H2 (hoặc =SUM(F2:H2)).",
+                        "Bước 2 — Kéo Fill Handle từ I2 xuống I7."
+                    ],
+                    "formulaPattern": "=F2+G2+H2",
+                    "tip": "Kiểm tra lại xem có ô nào ở cột F bị 0 do quên khóa $K$1 không.",
+                    "targetRefs": ["I2", "I3", "I4", "I5", "I6", "I7"]
+                }
+            ],
             "colHeaders": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"],
             "rows": [
                 ["Mã NV", "Chức vụ", "Từ ngày", "Đến ngày", "Số ngày làm", "Lương theo bậc", "Tiền thưởng", "Thưởng ngày làm", "Tổng lương", "Lương CB:", 2430000],
@@ -375,6 +653,55 @@ def build_interactive_labs() -> list[dict]:
                 "Cột Đơn giá (E2:E6): Dùng VLOOKUP kết hợp LEFT(A2,1) lấy cột 3 từ Bảng phụ $A$10:$C$13.",
                 "Cột Thành tiền (G2:G6): Đơn giá * Số lượng (E2*F2).",
                 "Ô G7 (Tổng tiền): Tính tổng cột Thành tiền bằng hàm SUM.",
+            ],
+            "steps": [
+                {
+                    "stepNumber": 1,
+                    "title": "Câu 1: Điền cột Tên hàng (B2:B6)",
+                    "requirement": "Dựa vào ký tự đầu của Mã hàng ('K', 'B', 'S', 'D') để tra Tên hàng từ bảng phụ $A$10:$C$13.",
+                    "analysis": [
+                        "Bước 1 — Dùng LEFT(A2, 1) để lấy ký tự đầu của Mã hàng ('K01' → 'K').",
+                        "Bước 2 — Dùng VLOOKUP dò trong vùng $A$10:$C$13 (nhấn F4 khóa bảng phụ), lấy cột 2 (Tên hàng), kiểu dò 0."
+                    ],
+                    "formulaPattern": "=VLOOKUP(LEFT(A2,1), $A$10:$C$13, 2, 0)",
+                    "tip": "Nhấn F4 khóa vùng $A$10:$C$13 trước khi kéo xuống B6.",
+                    "targetRefs": ["B2", "B3", "B4", "B5", "B6"]
+                },
+                {
+                    "stepNumber": 2,
+                    "title": "Câu 2: Tra Đơn giá (E2:E6)",
+                    "requirement": "Dùng VLOOKUP tương tự Câu 1 nhưng lấy cột Đơn giá (cột 3) từ bảng phụ.",
+                    "analysis": [
+                        "Bước 1 — Giữ nguyên giá trị dò LEFT(A2, 1) và bảng phụ $A$10:$C$13.",
+                        "Bước 2 — Đổi số thứ tự cột từ 2 thành 3 để lấy Đơn giá."
+                    ],
+                    "formulaPattern": "=VLOOKUP(LEFT(A2,1), $A$10:$C$13, 3, 0)",
+                    "tip": "Sau khi gõ xong ô E2, có thể kéo Fill Handle xuống E6.",
+                    "targetRefs": ["E2", "E3", "E4", "E5", "E6"]
+                },
+                {
+                    "stepNumber": 3,
+                    "title": "Câu 3: Tính Thành tiền (G2:G6)",
+                    "requirement": "Tính Thành tiền = Đơn giá * Số lượng.",
+                    "analysis": [
+                        "Bước 1 — Nhân ô Đơn giá (E2) với ô Số lượng (F2).",
+                        "Bước 2 — Kéo công thức xuống đến ô G6."
+                    ],
+                    "formulaPattern": "=E2*F2",
+                    "tip": "Kiểm tra nhanh dòng đầu: 25.000 * 30 = 750.000.",
+                    "targetRefs": ["G2", "G3", "G4", "G5", "G6"]
+                },
+                {
+                    "stepNumber": 4,
+                    "title": "Câu 4: Tính Tổng tiền (G7)",
+                    "requirement": "Tính tổng toàn bộ cột Thành tiền vào ô G7.",
+                    "analysis": [
+                        "Bước 1 — Dùng hàm SUM trên vùng G2:G6."
+                    ],
+                    "formulaPattern": "=SUM(G2:G6)",
+                    "tip": "Đảm bảo không quét nhầm vào chính ô G7 để tránh lỗi tham chiếu vòng (Circular Reference).",
+                    "targetRefs": ["G7"]
+                }
             ],
             "colHeaders": ["A", "B", "C", "D", "E", "F", "G"],
             "rows": [

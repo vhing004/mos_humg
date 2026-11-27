@@ -67,7 +67,8 @@ Dự án hiện chưa có mã nguồn web, chỉ có kho tài liệu học tập
 | **Giai đoạn 6** | **v2.0:** Excel Interactive Formula Lab (`HyperFormula`) & bỏ Bài 24–25 | `Hoàn thành` (2026-11-25) | Thực hành gõ & chấm công thức trực tiếp trên web (8 bài) |
 | **Giai đoạn 7** | **v2.1:** Nâng cấp UX Excel (Chọn/kéo vùng, F4 `$`, Fill Handle, Autocomplete) | `Hoàn thành` (2026-11-25) | Thao tác chọn vùng điều kiện giống Excel thật |
 | **Giai đoạn 8** | **v2.2:** Lý thuyết & Thực hành trọng tâm cho 5 ảnh bài tập Excel (`excel_1..5`) | `Hoàn thành` (2026-11-27) | Đủ 5 đề ảnh (10 Lab tương tác) + Lý thuyết trọng tâm |
-| **Giai đoạn 9** | **v2.3:** Thiết lập CI/CD (GitHub Actions) & Deploy SPA | `Chờ duyệt` | Git init, `.gitignore`, workflow deploy tự động |
+| **Giai đoạn 9** | **v2.3:** Thiết lập CI/CD & Deploy lên Vercel + Tối ưu giao diện Mobile | `Hoàn thành` (2026-11-27) | Git push `vhing004/mos_humg`, `vercel.json`, Bottom Nav & Touch Excel |
+| **Giai đoạn 10** | **v2.4:** Phân tích cách giải chi tiết từng câu & Thực hành Step-by-Step cho 5 Đề Excel | `Hoàn thành` (2026-11-27) | Stepper từng câu, phân tích tư duy, ẩn/hiện gợi ý, chấm riêng từng câu |
 
 ---
 
