@@ -44,16 +44,40 @@ export const EXCEL_FUNCTIONS_DOCS: ExcelFunctionDoc[] = [
     description: 'Tính trung bình cộng của các số.',
   },
   {
+    name: 'AVERAGEIF',
+    signature: 'AVERAGEIF(range, criteria, [average_range])',
+    args: ['range (vùng điều kiện)', 'criteria (điều kiện)', '[average_range] (vùng tính TB)'],
+    description: 'Tính trung bình các ô thỏa mãn một điều kiện.',
+  },
+  {
+    name: 'AVERAGEIFS',
+    signature: 'AVERAGEIFS(average_range, criteria_range1, criteria1, ...)',
+    args: ['average_range (vùng tính TB)', 'criteria_range1 (vùng ĐK 1)', 'criteria1 (ĐK 1)'],
+    description: 'Tính trung bình các ô thỏa mãn nhiều điều kiện.',
+  },
+  {
     name: 'MAX',
     signature: 'MAX(number1, [number2], ...)',
     args: ['number1', '[number2], ...'],
     description: 'Tìm giá trị lớn nhất trong vùng dữ liệu.',
   },
   {
+    name: 'MAXIFS',
+    signature: 'MAXIFS(max_range, criteria_range1, criteria1, ...)',
+    args: ['max_range (vùng lấy MAX)', 'criteria_range1 (vùng ĐK 1)', 'criteria1 (ĐK 1)'],
+    description: 'Tìm giá trị lớn nhất thỏa mãn một hoặc nhiều điều kiện.',
+  },
+  {
     name: 'MIN',
     signature: 'MIN(number1, [number2], ...)',
     args: ['number1', '[number2], ...'],
     description: 'Tìm giá trị nhỏ nhất trong vùng dữ liệu.',
+  },
+  {
+    name: 'MINIFS',
+    signature: 'MINIFS(min_range, criteria_range1, criteria1, ...)',
+    args: ['min_range (vùng lấy MIN)', 'criteria_range1 (vùng ĐK 1)', 'criteria1 (ĐK 1)'],
+    description: 'Tìm giá trị nhỏ nhất thỏa mãn một hoặc nhiều điều kiện.',
   },
   {
     name: 'COUNT',
@@ -168,10 +192,82 @@ export const EXCEL_FUNCTIONS_DOCS: ExcelFunctionDoc[] = [
     description: 'Làm tròn số đến số chữ số chỉ định.',
   },
   {
+    name: 'INT',
+    signature: 'INT(number)',
+    args: ['number (số thập phân)'],
+    description: 'Làm tròn xuống số nguyên gần nhất.',
+  },
+  {
     name: 'MOD',
     signature: 'MOD(number, divisor)',
     args: ['number (số bị chia)', 'divisor (số chia)'],
     description: 'Trả về phần dư của phép chia.',
+  },
+  {
+    name: 'IFERROR',
+    signature: 'IFERROR(value, value_if_error)',
+    args: ['value (giá trị hoặc công thức)', 'value_if_error (kết quả nếu lỗi)'],
+    description: 'Bắt lỗi công thức và trả về giá trị thay thế nếu có lỗi.',
+  },
+  {
+    name: 'RANK',
+    signature: 'RANK(number, ref, [order])',
+    args: ['number (số cần xếp hạng)', 'ref (danh sách số)', '[order] (0: giảm dần, 1: tăng dần)'],
+    description: 'Xếp hạng của một số trong danh sách.',
+  },
+  {
+    name: 'LEN',
+    signature: 'LEN(text)',
+    args: ['text (chuỗi văn bản)'],
+    description: 'Độ dài (số lượng ký tự) của chuỗi.',
+  },
+  {
+    name: 'TRIM',
+    signature: 'TRIM(text)',
+    args: ['text (chuỗi văn bản)'],
+    description: 'Xóa khoảng trắng thừa ở đầu, cuối và giữa các từ.',
+  },
+  {
+    name: 'CONCAT',
+    signature: 'CONCAT(text1, [text2], ...)',
+    args: ['text1', '[text2], ...'],
+    description: 'Nối hai hay nhiều chuỗi văn bản lại với nhau.',
+  },
+  {
+    name: 'DAY',
+    signature: 'DAY(serial_number)',
+    args: ['serial_number (ngày tháng)'],
+    description: 'Lấy ngày (1-31) từ giá trị ngày tháng.',
+  },
+  {
+    name: 'MONTH',
+    signature: 'MONTH(serial_number)',
+    args: ['serial_number (ngày tháng)'],
+    description: 'Lấy tháng (1-12) từ giá trị ngày tháng.',
+  },
+  {
+    name: 'YEAR',
+    signature: 'YEAR(serial_number)',
+    args: ['serial_number (ngày tháng)'],
+    description: 'Lấy năm từ giá trị ngày tháng.',
+  },
+  {
+    name: 'DATE',
+    signature: 'DATE(year, month, day)',
+    args: ['year (năm)', 'month (tháng)', 'day (ngày)'],
+    description: 'Tạo giá trị ngày tháng hợp lệ từ năm, tháng, ngày.',
+  },
+  {
+    name: 'TODAY',
+    signature: 'TODAY()',
+    args: [],
+    description: 'Trả về ngày hiện tại của hệ thống.',
+  },
+  {
+    name: 'NOW',
+    signature: 'NOW()',
+    args: [],
+    description: 'Trả về ngày và giờ hiện tại của hệ thống.',
   },
 ];
 
