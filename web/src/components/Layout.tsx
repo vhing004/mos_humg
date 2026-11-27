@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { ErrorBoundary } from './ErrorBoundary';
 import {
   BookOpen,
   CheckSquare,
@@ -54,9 +55,9 @@ export const Layout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[#f2f8fd] dark:bg-[#0b1623] text-slate-900 dark:text-slate-100 transition-colors">
       {/* Mobile top bar */}
       <header className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200 sticky top-0 z-30">
-        <div className="flex items-center gap-2 font-bold text-slate-800">
-          <GraduationCap className="w-6 h-6 text-indigo-600" />
-          <span>MOS & UDCNTTCB</span>
+        <div className="flex items-center gap-2.5 font-bold text-slate-800">
+          <img src="/humg.jpg" alt="HUMG Logo" className="w-7 h-7 rounded-lg object-contain bg-white shadow-sm border border-slate-200" />
+          <span>HUMG • MOS</span>
         </div>
         <div className="flex items-center gap-1">
           <button
@@ -78,25 +79,25 @@ export const Layout: React.FC = () => {
 
       {/* Sidebar cố định bên trái (hỗ trợ đóng/mở trên cả desktop & mobile) */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 bg-white border-r border-slate-200 flex flex-col transition-all duration-200 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        } ${collapsed ? 'w-64 md:w-20' : 'w-64'}`}
+        className={`fixed inset-y-0 left-0 z-40 bg-white border-r border-slate-200 flex flex-col transition-all duration-200 ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          } ${collapsed ? 'w-64 md:w-20' : 'w-64'}`}
       >
         {/* Header Sidebar + nút đóng/mở trên desktop */}
         <div
-          className={`hidden md:flex items-center border-b border-slate-100 py-4 ${
-            collapsed ? 'justify-center px-2' : 'justify-between px-4'
-          }`}
+          className={`hidden md:flex items-center border-b border-slate-100 py-4 ${collapsed ? 'justify-center px-2' : 'justify-between px-4'
+            }`}
         >
-          {!collapsed && (
+          {!collapsed ? (
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm shrink-0">
-                <GraduationCap className="w-5 h-5" />
-              </div>
+              <img src="/humg.jpg" alt="HUMG Logo" className="w-9 h-9 rounded-xl object-contain bg-white shadow-sm border border-slate-200 p-0.5 shrink-0" />
               <div className="min-w-0">
-                <div className="font-bold text-slate-900 leading-tight truncate">MOS Studio</div>
-                <div className="text-xs text-slate-500 truncate">Word • Excel • PPT</div>
+                <div className="font-bold text-slate-900 leading-tight truncate">HUMG • MOS</div>
+                <div className="text-xs text-slate-500 truncate">Luyện thi UDCNTTCB</div>
               </div>
+            </div>
+          ) : (
+            <div className="w-8 h-8 rounded-lg overflow-hidden shadow-sm shrink-0 flex items-center justify-center bg-white border border-slate-200 p-0.5">
+              <img src="/humg.jpg" alt="HUMG" className="w-full h-full object-contain" />
             </div>
           )}
 
@@ -126,14 +127,12 @@ export const Layout: React.FC = () => {
                 onClick={() => setMobileOpen(false)}
                 title={collapsed ? item.label : undefined}
                 className={({ isActive }) =>
-                  `flex items-center rounded-xl text-sm font-medium transition-colors ${
-                    collapsed
-                      ? 'md:justify-center md:px-2 md:py-2.5 gap-3 px-3.5 py-2.5'
-                      : 'gap-3 px-3.5 py-2.5'
-                  } ${
-                    isActive
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  `flex items-center rounded-xl text-sm font-medium transition-colors ${collapsed
+                    ? 'md:justify-center md:px-2 md:py-2.5 gap-3 px-3.5 py-2.5'
+                    : 'gap-3 px-3.5 py-2.5'
+                  } ${isActive
+                    ? 'bg-indigo-50 text-indigo-700'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`
                 }
               >
@@ -149,9 +148,8 @@ export const Layout: React.FC = () => {
           <button
             onClick={() => setDarkMode((d) => !d)}
             title={darkMode ? 'Chuyển sang Chế độ Sáng' : 'Chuyển sang Chế độ Tối'}
-            className={`w-full flex items-center rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-700 text-xs font-semibold transition-colors ${
-              collapsed ? 'md:justify-center p-2.5' : 'justify-between px-3 py-2'
-            }`}
+            className={`w-full flex items-center rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-700 text-xs font-semibold transition-colors ${collapsed ? 'md:justify-center p-2.5' : 'justify-between px-3 py-2'
+              }`}
           >
             <span className="flex items-center gap-2">
               {darkMode ? (
@@ -190,12 +188,13 @@ export const Layout: React.FC = () => {
 
       {/* Main Content tự động co giãn theo trạng thái Sidebar cố định */}
       <div
-        className={`flex-1 min-w-0 transition-all duration-200 ${
-          collapsed ? 'md:pl-20' : 'md:pl-64'
-        }`}
+        className={`flex-1 min-w-0 transition-all duration-200 ${collapsed ? 'md:pl-20' : 'md:pl-64'
+          }`}
       >
         <main className="p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 max-w-screen-2xl mx-auto w-full">
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </main>
       </div>
 
@@ -218,10 +217,9 @@ export const Layout: React.FC = () => {
               to={item.to}
               end={item.exact}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center gap-0.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-colors min-w-[56px] ${
-                  isActive
-                    ? 'text-indigo-600 bg-indigo-50/80'
-                    : 'text-slate-500 hover:text-slate-900'
+                `flex flex-col items-center justify-center gap-0.5 px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-colors min-w-[56px] ${isActive
+                  ? 'text-indigo-600 bg-indigo-50/80'
+                  : 'text-slate-500 hover:text-slate-900'
                 }`
               }
             >
