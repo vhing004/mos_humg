@@ -92,7 +92,7 @@ export const Layout: React.FC = () => {
               <img src="/humg.jpg" alt="HUMG Logo" className="w-9 h-9 rounded-xl object-contain bg-white shadow-sm border border-slate-200 p-0.5 shrink-0" />
               <div className="min-w-0">
                 <div className="font-bold text-slate-900 leading-tight truncate">HUMG • MOS</div>
-                <div className="text-xs text-slate-500 truncate">Luyện thi UDCNTTCB</div>
+                <div className="text-xs text-slate-500 truncate">Luyện thi tin học đầu ra</div>
               </div>
             </div>
           ) : (
